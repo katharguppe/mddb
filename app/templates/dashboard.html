@@ -60,9 +60,10 @@
                     <span class="company-name">{{ company.name }}</span>
                 </div>
 
-                {# KPI rows #}
+                {# KPI rows — skip Target row (shown in Know More panel) #}
                 <div class="company-kpi-table">
                     {% for kpi in company.kpis %}
+                    {% if kpi.label != "Target" %}
                     <div class="company-kpi-row">
                         <span class="ckpi-label">{{ kpi.label }}</span>
                         <span class="ckpi-value">{{ kpi.value }}</span>
@@ -72,11 +73,9 @@
                         {% elif kpi.delta == "down" %}<span class="delta-down">▼</span>
                         {% else %}<span class="delta-none"></span>
                         {% endif %}
-                        {% else %}
-                        <span class="ckpi-target-placeholder"></span>
-                        <span class="delta-none"></span>
                         {% endif %}
                     </div>
+                    {% endif %}
                     {% endfor %}
                 </div>
 
@@ -88,7 +87,7 @@
 
                 {# Slide-down details panel (hidden until toggled) #}
                 <div class="company-details" id="details-{{ company.id }}">
-                    <p class="details-placeholder">Aging analysis — Session 04</p>
+                    <p class="details-placeholder">Target: {{ company.kpis[0].value }}&nbsp;&nbsp;·&nbsp;&nbsp;Aging analysis — Session 04</p>
                 </div>
 
             </div>
