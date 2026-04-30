@@ -25,10 +25,59 @@
 
 <!-- ═══════════════════════════════════════════
      SECTION B — Corporate KPI Strip
-     (added in Task 4)
      ═══════════════════════════════════════════ -->
 <section class="kpi-strip" aria-label="Corporate KPI Summary">
-    <!-- placeholder until Task 4 -->
+  {% for kpi in corp_kpis %}
+    {% if kpi.pct <= 25 %}
+      {% set badge_class = "badge-red" %}
+    {% elif kpi.pct <= 50 %}
+      {% set badge_class = "badge-red-orange" %}
+    {% elif kpi.pct <= 75 %}
+      {% set badge_class = "badge-amber" %}
+    {% else %}
+      {% set badge_class = "badge-green" %}
+    {% endif %}
+
+    {% if kpi.delta >= 0 %}
+      {% set delta_class = "delta-up" %}
+      {% set delta_arrow = "▲" %}
+    {% else %}
+      {% set delta_class = "delta-down" %}
+      {% set delta_arrow = "▼" %}
+    {% endif %}
+
+    <article class="kpi-card">
+      <p class="kpi-label">{{ kpi.label }}</p>
+
+      <p class="kpi-value">
+        {% if kpi.unit == "cr" %}
+          {{ kpi.current | crore }}
+        {% else %}
+          {{ kpi.current | int }}
+        {% endif %}
+      </p>
+
+      <p class="kpi-target">
+        of&nbsp;
+        {% if kpi.unit == "cr" %}
+          {{ kpi.target | crore }}
+        {% else %}
+          {{ kpi.target | int }}
+        {% endif %}
+      </p>
+
+      <span class="kpi-badge {{ badge_class }}">{{ kpi.pct }}%</span>
+
+      <p class="kpi-delta {{ delta_class }}">
+        {{ delta_arrow }}&nbsp;
+        {% if kpi.unit == "cr" %}
+          Rs. {{ kpi.delta | abs | round(1) }} Cr WoW
+        {% else %}
+          {{ kpi.delta | abs | int }} WoW
+        {% endif %}
+      </p>
+    </article>
+  {% endfor %}
 </section>
 
 {% endblock %}
