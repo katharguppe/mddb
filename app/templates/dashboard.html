@@ -28,7 +28,7 @@
      ═══════════════════════════════════════════ -->
 <section class="kpi-strip" aria-label="Corporate KPI Summary">
   {% for kpi in corp_kpis %}
-    {% if kpi.pct <= 25 %}
+    {% if kpi.pct < 25 %}
       {% set badge_class = "badge-red" %}
     {% elif kpi.pct <= 50 %}
       {% set badge_class = "badge-red-orange" %}
