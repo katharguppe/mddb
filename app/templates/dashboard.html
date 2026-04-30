@@ -3,15 +3,57 @@
 {% block title %}MD Dashboard . Fidelitus Corp{% endblock %}
 
 {% block content %}
-<header class="dashboard-header">
-    <h1 class="dashboard-title">MD Dashboard . Fidelitus Corp</h1>
-    <p class="dashboard-subtitle">Phase 0 Mockup</p>
+
+<!-- ═══════════════════════════════════════════
+     SECTION A — Header Bar
+     ═══════════════════════════════════════════ -->
+<header class="header-bar">
+    <!-- Left: branding + live clock -->
+    <div class="header-left">
+        <span class="header-brand">FIDELITUS CORP . MD DASHBOARD</span>
+        <span class="header-clock" id="liveClock"></span>
+    </div>
+
+    <!-- Right: time-filter toggle -->
+    <nav class="time-filter" role="group" aria-label="Time period filter">
+        <button class="tf-btn tf-active" data-period="WTD">WTD</button>
+        <button class="tf-btn" data-period="MTD">MTD</button>
+        <button class="tf-btn" data-period="QTD">QTD</button>
+        <button class="tf-btn" data-period="YTD">YTD</button>
+    </nav>
 </header>
 
-<main class="dashboard-main">
-    <!-- Placeholder for dashboard content -->
-    <section class="section">
-        <p class="placeholder-text">Dashboard content coming soon...</p>
-    </section>
-</main>
+<!-- ═══════════════════════════════════════════
+     SECTION B — Corporate KPI Strip
+     (added in Task 4)
+     ═══════════════════════════════════════════ -->
+<section class="kpi-strip" aria-label="Corporate KPI Summary">
+    <!-- placeholder until Task 4 -->
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* ── Live Clock ── */
+function updateClock() {
+    const now = new Date();
+    const hh  = String(now.getHours()).padStart(2, '0');
+    const mm  = String(now.getMinutes()).padStart(2, '0');
+    const day = now.toLocaleDateString('en-IN', {
+        day: '2-digit', month: 'short', year: 'numeric'
+    });
+    document.getElementById('liveClock').textContent = `${hh}:${mm} . ${day}`;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+/* ── Time-Filter Toggle ── */
+document.querySelectorAll('.tf-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('tf-active'));
+        btn.classList.add('tf-active');
+    });
+});
+</script>
 {% endblock %}
