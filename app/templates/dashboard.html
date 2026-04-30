@@ -3,15 +3,102 @@
 {% block title %}MD Dashboard . Fidelitus Corp{% endblock %}
 
 {% block content %}
+{# Macro: map percentage to CSS color-band class #}
+{% macro pct_class(pct) -%}
+  {%- if pct is none -%}
+  {%- elif pct <= 25 -%}kpi-status-red
+  {%- elif pct <= 50 -%}kpi-status-red-orange
+  {%- elif pct <= 75 -%}kpi-status-amber
+  {%- else -%}kpi-status-green
+  {%- endif -%}
+{%- endmacro %}
+
 <header class="dashboard-header">
-    <h1 class="dashboard-title">MD Dashboard . Fidelitus Corp</h1>
-    <p class="dashboard-subtitle">Phase 0 Mockup</p>
+    <div>
+        <p class="dashboard-eyebrow">Fidelitus Corp . MD Dashboard</p>
+        <h1 class="dashboard-title">Consolidated View</h1>
+    </div>
+    <span class="phase-badge">Phase 0 Mockup</span>
 </header>
 
 <main class="dashboard-main">
-    <!-- Placeholder for dashboard content -->
+
+    {# ── Section A: Corporate KPI Strip ── #}
     <section class="section">
-        <p class="placeholder-text">Dashboard content coming soon...</p>
+        <div class="section-label">Corporate KPIs</div>
+        <div class="kpi-strip">
+            {% for kpi in data.corporate.kpis %}
+            <div class="kpi-card">
+                <div class="kpi-label">{{ kpi.label }}</div>
+                <div class="kpi-value">{{ kpi.value }}</div>
+                {% if kpi.target %}
+                <div class="kpi-target">of {{ kpi.target }}</div>
+                {% endif %}
+                {% if kpi.pct is not none %}
+                <div class="kpi-footer">
+                    <span class="pct-badge {{ pct_class(kpi.pct) }}">{{ kpi.pct }}%</span>
+                    {% if kpi.delta == "up" %}<span class="delta-up">▲</span>
+                    {% elif kpi.delta == "down" %}<span class="delta-down">▼</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
     </section>
+
+    {# ── Section B: Company Cards ── #}
+    <section class="section">
+        <div class="section-label">Subsidiaries</div>
+        <div class="companies-grid">
+            {% for company in data.companies %}
+            <div class="company-card" style="border-top-color: {{ company.dot_color }}">
+
+                {# Card header: dot + name #}
+                <div class="company-card-header">
+                    <span class="company-dot" style="background: {{ company.dot_color }}"></span>
+                    <span class="company-name">{{ company.name }}</span>
+                </div>
+
+                {# KPI rows #}
+                <div class="company-kpi-table">
+                    {% for kpi in company.kpis %}
+                    <div class="company-kpi-row">
+                        <span class="ckpi-label">{{ kpi.label }}</span>
+                        <span class="ckpi-value">{{ kpi.value }}</span>
+                        {% if kpi.pct is not none %}
+                        <span class="pct-badge {{ pct_class(kpi.pct) }}">{{ kpi.pct }}%</span>
+                        {% if kpi.delta == "up" %}<span class="delta-up">▲</span>
+                        {% elif kpi.delta == "down" %}<span class="delta-down">▼</span>
+                        {% else %}<span class="delta-none"></span>
+                        {% endif %}
+                        {% else %}
+                        <span class="ckpi-target-placeholder"></span>
+                        <span class="delta-none"></span>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {# Know More button #}
+                <div class="company-card-footer">
+                    <button class="btn-know-more"
+                            onclick="toggleDetails('{{ company.id }}')">Know More →</button>
+                </div>
+
+                {# Slide-down details panel (hidden until toggled) #}
+                <div class="company-details" id="details-{{ company.id }}">
+                    <p class="details-placeholder">Aging analysis — Session 04</p>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
 </main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', path='script.js') }}"></script>
 {% endblock %}

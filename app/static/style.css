@@ -80,22 +80,36 @@ p {
 
 /* Dashboard Header */
 .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     border-bottom: 1px solid var(--color-border);
     padding-bottom: var(--spacing-xl);
     margin-bottom: var(--spacing-2xl);
 }
 
-.dashboard-title {
+.dashboard-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
     color: var(--color-accent);
-    font-size: 2.5rem;
-    font-family: var(--font-heading);
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: 0.25rem;
 }
 
-.dashboard-subtitle {
+.dashboard-title {
+    color: var(--color-text-primary);
+    font-size: 2rem;
+    font-family: var(--font-heading);
+    margin: 0;
+}
+
+.phase-badge {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    border: 1px solid var(--color-border);
     color: var(--color-text-secondary);
-    font-size: 1rem;
-    font-weight: 400;
+    letter-spacing: 1px;
 }
 
 /* Dashboard Main */
@@ -147,15 +161,234 @@ p {
         padding: var(--spacing-lg);
     }
 
-    .dashboard-title {
-        font-size: 2rem;
-    }
-
     h1 {
         font-size: 2rem;
     }
 
     h2 {
         font-size: 1.5rem;
+    }
+}
+
+/* ── Section eyebrow label ── */
+.section-label {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
+}
+
+/* ── % badge ── */
+.pct-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.pct-badge.kpi-status-red        { color: var(--color-red); }
+.pct-badge.kpi-status-red-orange { color: var(--color-red-orange); }
+.pct-badge.kpi-status-amber      { color: var(--color-amber); }
+.pct-badge.kpi-status-green      { color: var(--color-green); }
+
+/* ── Delta arrows ── */
+.delta-up   { color: var(--color-green); font-size: 0.75rem; }
+.delta-down { color: var(--color-red);   font-size: 0.75rem; }
+.delta-none { display: inline-block; width: 0.75rem; }
+
+/* ── Corporate KPI Strip (Section A) ── */
+.kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+}
+
+.kpi-card {
+    background: #1c2330;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.kpi-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-text-secondary);
+}
+
+.kpi-value {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.kpi-target {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+}
+
+.kpi-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.25rem;
+}
+
+/* ── Company Cards Grid (Section B) ── */
+.companies-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.company-card {
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+    border-top-width: 3px;
+    border-top-style: solid;
+    display: flex;
+    flex-direction: column;
+}
+
+.company-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.company-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.company-name {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.company-kpi-table {
+    padding: 0.5rem 1rem;
+    flex: 1;
+}
+
+.company-kpi-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+}
+
+.company-kpi-row:last-child {
+    border-bottom: none;
+}
+
+.ckpi-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-secondary);
+    width: 5rem;
+    flex-shrink: 0;
+}
+
+.ckpi-value {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    flex: 1;
+}
+
+.ckpi-target-placeholder {
+    display: inline-block;
+    width: 3rem;
+}
+
+/* ── Know More button ── */
+.company-card-footer {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-know-more {
+    background: transparent;
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    border-radius: 4px;
+    padding: 0.3rem 0.8rem;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 500;
+    transition: background 0.15s;
+}
+
+.btn-know-more:hover {
+    background: rgba(232, 168, 56, 0.1);
+}
+
+/* ── Slide-down details panel ── */
+.company-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #1c2330;
+}
+
+.company-details.open {
+    max-height: 120px;
+    border-top: 1px solid var(--color-border);
+}
+
+.details-placeholder {
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    font-style: italic;
+    margin: 0;
+}
+
+/* ── Responsive (additions) ── */
+@media (max-width: 1024px) {
+    .kpi-strip {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .companies-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .kpi-strip {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
