@@ -326,7 +326,7 @@ def _build_corporate_aging():
         for slug_data in AGING_DATA.values():
             items.extend(slug_data[bucket]["items"])
         count = sum(len(slug_data[bucket]["items"]) for slug_data in AGING_DATA.values())
-        result[bucket] = {"count": count, "items": items, "total": f"Rs. {count} items (see below)"}
+        result[bucket] = {"count": count, "items": items, "total": f"{count} items"}
     return result
 
 AGING_DATA["corporate"] = _build_corporate_aging()
