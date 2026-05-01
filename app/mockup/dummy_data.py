@@ -418,8 +418,42 @@ def _empty_pipeline_bucket():
         "npa": {"count": 0, "total": "Rs.0", "items": []},
     }
 
-AGING_DATA["pipeline_leads"]     = _empty_pipeline_bucket()
-AGING_DATA["pipeline_meetings"]  = _empty_pipeline_bucket()
+AGING_DATA["pipeline_leads"] = {
+    "7d": {
+        "count": 2, "total": "Rs.0",
+        "items": [
+            {"company": "Fidelitus Transactions", "member": "Rajesh Kumar",  "value": "—", "days": 5, "reason": "Lead not contacted yet, assigned this week"},
+            {"company": "Fidelitus Projects",     "member": "Arjun Shetty",  "value": "—", "days": 6, "reason": "Initial outreach email not responded to"},
+        ],
+    },
+    "14d": {
+        "count": 1, "total": "Rs.0",
+        "items": [
+            {"company": "Fidelitus HR Labs",      "member": "Preethi Nair",  "value": "—", "days": 10, "reason": "Warm lead, follow-up calls unanswered"},
+        ],
+    },
+    "21d": {"count": 0, "total": "Rs.0", "items": []},
+    "90d": {"count": 0, "total": "Rs.0", "items": []},
+    "npa":  {"count": 0, "total": "Rs.0", "items": []},
+}
+AGING_DATA["pipeline_meetings"] = {
+    "7d": {
+        "count": 2, "total": "Rs.0",
+        "items": [
+            {"company": "Fidelitus Transactions", "member": "Priya Menon",   "value": "—", "days": 4, "reason": "Meeting committed, client rescheduled"},
+            {"company": "Fidelitus FMS",          "member": "Anil Kapoor",   "value": "—", "days": 6, "reason": "Facility head unavailable this week"},
+        ],
+    },
+    "14d": {
+        "count": 1, "total": "Rs.0",
+        "items": [
+            {"company": "Fidelitus Technology",   "member": "Rohini Das",    "value": "—", "days": 11, "reason": "Demo environment not ready, delayed"},
+        ],
+    },
+    "21d": {"count": 0, "total": "Rs.0", "items": []},
+    "90d": {"count": 0, "total": "Rs.0", "items": []},
+    "npa":  {"count": 0, "total": "Rs.0", "items": []},
+}
 AGING_DATA["pipeline_proposals"] = {
     "7d": {
         "count": 2,
@@ -460,7 +494,24 @@ AGING_DATA["pipeline_orders"] = {
     "90d": {"count": 0, "total": "Rs.0", "items": []},
     "npa": {"count": 0, "total": "Rs.0", "items": []},
 }
-AGING_DATA["pipeline_invoices"]  = _empty_pipeline_bucket()
+AGING_DATA["pipeline_invoices"] = {
+    "7d": {
+        "count": 2, "total": "Rs.8 Cr",
+        "items": [
+            {"company": "Fidelitus Transactions", "member": "Anand Rao",     "value": "Rs.5 Cr",  "days": 5, "reason": "Invoice raised, awaiting client PO number"},
+            {"company": "Fidelitus FMS",          "member": "Sneha Iyer",    "value": "Rs.3 Cr",  "days": 4, "reason": "Monthly invoice pending manager approval"},
+        ],
+    },
+    "14d": {
+        "count": 1, "total": "Rs.6 Cr",
+        "items": [
+            {"company": "Fidelitus Projects",     "member": "Kiran Joshi",   "value": "Rs.6 Cr",  "days": 12, "reason": "Retention invoice, milestone dispute ongoing"},
+        ],
+    },
+    "21d": {"count": 0, "total": "Rs.0", "items": []},
+    "90d": {"count": 0, "total": "Rs.0", "items": []},
+    "npa":  {"count": 0, "total": "Rs.0", "items": []},
+}
 AGING_DATA["pipeline_collections"] = {
     "7d": {
         "count": 2,
@@ -662,5 +713,253 @@ KPI_DETAILS = {
             {"client": "Hitachi Energy",         "bd": "Aditya Sharma", "value": "Rs.6 Cr",  "submitted": "28 Apr", "status": "Submitted"},
             {"client": "ABB India",              "bd": "Aditya Sharma", "value": "Rs.5 Cr",  "submitted": "30 Apr", "status": "Submitted"},
         ]},
+    },
+}
+
+# KPI aging: committed-but-delayed items per company per KPI tab.
+# Keys match company slug + tab name. Bucket schema identical to AGING_DATA.
+KPI_AGING = {
+    "transactions": {
+        "revenue": {
+            "7d":  {"count": 2, "total": "Rs.14 Cr", "items": [
+                {"company": "Fidelitus Trans", "member": "Vikram Singh",  "value": "Rs.7 Cr",  "days": 5, "reason": "LOI delayed pending legal review"},
+                {"company": "Fidelitus Trans", "member": "Mohan Das",     "value": "Rs.7 Cr",  "days": 6, "reason": "Client board approval pending"},
+            ]},
+            "14d": {"count": 1, "total": "Rs.9 Cr", "items": [
+                {"company": "Fidelitus Trans", "member": "Kavitha Reddy", "value": "Rs.9 Cr",  "days": 12, "reason": "Agreement redrafting by client counsel"},
+            ]},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "invoiced": {
+            "7d":  {"count": 2, "total": "Rs.17 Cr", "items": [
+                {"company": "Fidelitus Trans", "member": "Suresh Nair",   "value": "Rs.10 Cr", "days": 4,  "reason": "Client finance team on leave"},
+                {"company": "Fidelitus Trans", "member": "Anand Rao",     "value": "Rs.7 Cr",  "days": 6,  "reason": "Bank transfer initiated, clearance awaited"},
+            ]},
+            "14d": {"count": 1, "total": "Rs.9 Cr", "items": [
+                {"company": "Fidelitus Trans", "member": "Rajesh Kumar",  "value": "Rs.9 Cr",  "days": 11, "reason": "Disputed invoice line item, revised invoice sent"},
+            ]},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "meetings": {
+            "7d":  {"count": 2, "total": "—", "items": [
+                {"company": "Fidelitus Trans", "member": "Priya Menon",   "value": "—", "days": 3, "reason": "Client rescheduled, new slot pending confirmation"},
+                {"company": "Fidelitus Trans", "member": "Anand Rao",     "value": "—", "days": 5, "reason": "Key stakeholder travelling"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "proposals": {
+            "7d":  {"count": 1, "total": "Rs.22 Cr", "items": [
+                {"company": "Fidelitus Trans", "member": "Priya Menon",   "value": "Rs.22 Cr", "days": 4, "reason": "Awaiting pricing sign-off from MD"},
+            ]},
+            "14d": {"count": 1, "total": "Rs.18 Cr", "items": [
+                {"company": "Fidelitus Trans", "member": "Rajesh Kumar",  "value": "Rs.18 Cr", "days": 10, "reason": "Technical scope being finalised"},
+            ]},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+    },
+    "projects": {
+        "revenue": {
+            "7d":  {"count": 1, "total": "Rs.5 Cr", "items": [
+                {"company": "Fidelitus Projects", "member": "Meera Pillai",  "value": "Rs.5 Cr",  "days": 6,  "reason": "Completion certificate not issued"},
+            ]},
+            "14d": {"count": 1, "total": "Rs.5 Cr", "items": [
+                {"company": "Fidelitus Projects", "member": "Rahul Verma",   "value": "Rs.5 Cr",  "days": 13, "reason": "Scope change order pending client sign"},
+            ]},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "invoiced": {
+            "7d":  {"count": 1, "total": "Rs.6 Cr", "items": [
+                {"company": "Fidelitus Projects", "member": "Deepa Thomas",  "value": "Rs.6 Cr",  "days": 5,  "reason": "Client awaiting internal PO approval"},
+            ]},
+            "14d": {"count": 1, "total": "Rs.5 Cr", "items": [
+                {"company": "Fidelitus Projects", "member": "Kiran Joshi",   "value": "Rs.5 Cr",  "days": 12, "reason": "Invoice under dispute for punch list"},
+            ]},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "meetings": {
+            "7d":  {"count": 1, "total": "—", "items": [
+                {"company": "Fidelitus Projects", "member": "Arjun Shetty",  "value": "—", "days": 4, "reason": "Site visit deferred due to weather"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "proposals": {
+            "7d":  {"count": 1, "total": "Rs.12 Cr", "items": [
+                {"company": "Fidelitus Projects", "member": "Arjun Shetty",  "value": "Rs.12 Cr", "days": 5, "reason": "Bill of quantities revision ongoing"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+    },
+    "fms": {
+        "revenue": {
+            "7d":  {"count": 1, "total": "Rs.3 Cr", "items": [
+                {"company": "Fidelitus FMS", "member": "Gopal Nair",    "value": "Rs.3 Cr",  "days": 5, "reason": "AMC sign-off delayed by facility head"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "invoiced": {
+            "7d":  {"count": 1, "total": "Rs.5 Cr", "items": [
+                {"company": "Fidelitus FMS", "member": "Ramesh Gupta",  "value": "Rs.5 Cr",  "days": 6, "reason": "Monthly billing cycle delay by client ERP"},
+            ]},
+            "14d": {"count": 1, "total": "Rs.3 Cr", "items": [
+                {"company": "Fidelitus FMS", "member": "Lata Srinivas", "value": "Rs.3 Cr",  "days": 11, "reason": "Security deposit adjustment dispute"},
+            ]},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "meetings": {
+            "7d":  {"count": 1, "total": "—", "items": [
+                {"company": "Fidelitus FMS", "member": "Anil Kapoor",   "value": "—", "days": 4, "reason": "Facility manager on leave, rescheduling"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "proposals": {
+            "7d":  {"count": 1, "total": "Rs.6 Cr", "items": [
+                {"company": "Fidelitus FMS", "member": "Sneha Iyer",    "value": "Rs.6 Cr",  "days": 5, "reason": "Client requesting scope addition before sign-off"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+    },
+    "hrlabs": {
+        "revenue": {
+            "7d":  {"count": 1, "total": "Rs.2 Cr", "items": [
+                {"company": "Fidelitus HR Labs", "member": "Shobha Rao",    "value": "Rs.2 Cr",  "days": 6, "reason": "Candidate joining deferred by 2 weeks"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "invoiced": {
+            "7d":  {"count": 1, "total": "Rs.2 Cr", "items": [
+                {"company": "Fidelitus HR Labs", "member": "Santosh Kumar", "value": "Rs.2 Cr",  "days": 5, "reason": "Client HR system delay in processing invoice"},
+            ]},
+            "14d": {"count": 1, "total": "Rs.2 Cr", "items": [
+                {"company": "Fidelitus HR Labs", "member": "Divya Menon",   "value": "Rs.2 Cr",  "days": 10, "reason": "PO amendment blocking payment release"},
+            ]},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "meetings": {
+            "7d":  {"count": 1, "total": "—", "items": [
+                {"company": "Fidelitus HR Labs", "member": "Preethi Nair",  "value": "—", "days": 3, "reason": "CHRO travelling, meeting moved to next week"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "proposals": {
+            "7d":  {"count": 1, "total": "Rs.3 Cr", "items": [
+                {"company": "Fidelitus HR Labs", "member": "Preethi Nair",  "value": "Rs.3 Cr",  "days": 4, "reason": "Pricing revision requested by client"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+    },
+    "technology": {
+        "revenue": {
+            "7d":  {"count": 1, "total": "Rs.1.5 Cr", "items": [
+                {"company": "Fidelitus Technology", "member": "Vikash Mehta",  "value": "Rs.1.5 Cr", "days": 7, "reason": "UAT sign-off delayed by client infra team"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "invoiced": {
+            "7d":  {"count": 1, "total": "Rs.2 Cr", "items": [
+                {"company": "Fidelitus Technology", "member": "Rohini Das",    "value": "Rs.2 Cr",   "days": 6, "reason": "Client finance freeze until Q1 close"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "meetings": {
+            "7d":  {"count": 1, "total": "—", "items": [
+                {"company": "Fidelitus Technology", "member": "Sudhir Bhat",   "value": "—", "days": 5, "reason": "Technical lead on bench, meeting deferred"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "proposals": {
+            "7d":  {"count": 1, "total": "Rs.3 Cr", "items": [
+                {"company": "Fidelitus Technology", "member": "Vikash Mehta",  "value": "Rs.3 Cr",   "days": 4, "reason": "Architecture diagram review pending internally"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+    },
+    "gcc": {
+        "revenue": {
+            "7d":  {"count": 1, "total": "Rs.1 Cr", "items": [
+                {"company": "Fidelitus GCC Nexus", "member": "Aditya Sharma", "value": "Rs.1 Cr",   "days": 6, "reason": "LOI received, formal agreement in drafting"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "invoiced": {
+            "7d":  {"count": 0, "total": "Rs.0", "items": []},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "meetings": {
+            "7d":  {"count": 1, "total": "—", "items": [
+                {"company": "Fidelitus GCC Nexus", "member": "Aditya Sharma", "value": "—", "days": 4, "reason": "International client, time-zone scheduling in progress"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
+        "proposals": {
+            "7d":  {"count": 1, "total": "Rs.8 Cr", "items": [
+                {"company": "Fidelitus GCC Nexus", "member": "Aditya Sharma", "value": "Rs.8 Cr",   "days": 5, "reason": "Awaiting inputs from GCC consultant"},
+            ]},
+            "14d": {"count": 0, "total": "Rs.0", "items": []},
+            "21d": {"count": 0, "total": "Rs.0", "items": []},
+            "90d": {"count": 0, "total": "Rs.0", "items": []},
+            "npa":  {"count": 0, "total": "Rs.0", "items": []},
+        },
     },
 }
