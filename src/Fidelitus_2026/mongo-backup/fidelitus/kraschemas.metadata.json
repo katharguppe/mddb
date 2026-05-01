@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"2d44db82b1ea4b9283e1e9aa2fe66f5a","collectionName":"kraschemas","type":"collection"}

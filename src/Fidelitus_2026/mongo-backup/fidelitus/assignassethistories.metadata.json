@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"e26ae29205844b0ea1d32c6be1963837","collectionName":"assignassethistories","type":"collection"}

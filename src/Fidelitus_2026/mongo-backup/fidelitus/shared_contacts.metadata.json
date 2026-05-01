@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"846f897af7fd46488e9534de4b002cd5","collectionName":"shared_contacts","type":"collection"}

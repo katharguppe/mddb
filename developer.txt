@@ -1,0 +1,11 @@
+cd D:\Fidelitus\mddb
+  .\setup-mddb.ps1                          # one time
+  copy .env.example .env                    # leave PRODUCTION=1
+  .\mddb-sessions.ps1 -Session list        # see all sessions
+  .\mddb-sessions.ps1 -Session s01-scaffold
+
+  Handoff to developer
+
+  Tell your colleague: start at s08-db-audit. The docs/HANDOFF.md (created in s07) will give him everything — what to
+  fill in .env, which collections map to which KPI, where the dummy data lives, and what each remaining session does
+  step by step.

@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"asset_id":{"$numberInt":"1"}},"name":"asset_id_1","background":true,"unique":true}],"uuid":"7a181ec15ff943dda55b19f5164297ef","collectionName":"companyassetoptions","type":"collection"}

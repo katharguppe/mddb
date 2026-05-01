@@ -45,3 +45,11 @@ Thumbs.db
 
 # Git worktrees
 .worktrees/
+
+# Local large files / personal docs
+Fidelitus_2026-20260423T012840Z-3-001.zip
+New Text Document.txt
+srinivas_ks_gcc_nexus_profile_v4.pdf
+
+# Claude Code local config
+.claude/

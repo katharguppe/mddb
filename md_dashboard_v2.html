@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MD Dashboard — Fidelitus Corp</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --border: #2a3441;
+    --accent: #e8a838;
+    --accent2: #3b82f6;
+    --accent3: #10b981;
+    --accent4: #f43f5e;
+    --purple: #a855f7;
+    --text: #e6edf3;
+    --text-dim: #7d8590;
+    --text-mid: #adbac7;
+  }
+
+  body {
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px 24px;
+  }
+
+  /* TIME FILTER TOGGLE */
+  .time-filter {
+    display: flex;
+    gap: 4px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 3px;
+  }
+
+  .tf-btn {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 4px 9px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+
+  .tf-btn.active {
+    background: var(--accent);
+    color: #000;
+  }
+
+  .tf-btn:hover:not(.active) {
+    color: var(--text);
+    background: var(--border);
+  }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+  }
+
+  .badge {
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .badge-gold { background: rgba(232,168,56,0.15); color: var(--accent); border: 1px solid rgba(232,168,56,0.3); }
+  .badge-blue { background: rgba(59,130,246,0.15); color: var(--accent2); border: 1px solid rgba(59,130,246,0.3); }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* GRID */
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .grid-3-1 {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .card.gold::before { background: var(--accent); }
+  .card.blue::before { background: var(--accent2); }
+  .card.green::before { background: var(--accent3); }
+  .card.red::before { background: var(--accent4); }
+  .card.purple::before { background: var(--purple); }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* METRIC BOXES */
+  .metric-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .metric {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+  }
+
+  .metric-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .metric-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    line-height: 1;
+  }
+
+  .metric-sub {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill { height: 100%; border-radius: 2px; }
+
+  /* VERTICAL BARS */
+  .vertical-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .vertical-item:last-child { border-bottom: none; }
+
+  .v-name { font-size: 12px; font-weight: 500; color: var(--text-mid); width: 75px; }
+
+  .v-bar-wrap {
+    flex: 1;
+    height: 5px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .v-bar { height: 100%; border-radius: 3px; }
+
+  .v-pct {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 32px;
+    text-align: right;
+  }
+
+  /* LEADS FLOW */
+  .leads-flow {
+    display: grid;
+    grid-template-columns: 1fr 16px 1fr 16px 1fr 16px 1fr;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .lead-stage {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+
+  .lead-stage-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); margin-bottom: 6px; }
+  .lead-stage-value { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; }
+
+  .flow-arrow { text-align: center; color: var(--text-dim); font-size: 14px; }
+
+  .lv-chips {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+
+  .lv-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 5px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-dim);
+  }
+
+  .lv-chip span {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 2px;
+  }
+
+  /* PIPELINE */
+  .pipeline-steps { display: flex; flex-direction: column; gap: 6px; }
+
+  .pipe-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: var(--surface2);
+    border-radius: 7px;
+    border: 1px solid var(--border);
+  }
+
+  .pipe-icon { font-size: 13px; width: 22px; text-align: center; }
+  .pipe-label { flex: 1; font-size: 11px; color: var(--text-mid); }
+  .pipe-val { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; }
+  .pipe-arrow { text-align: center; color: var(--text-dim); font-size: 10px; padding: 1px 0; }
+
+  /* DRILL DOWN */
+  .drill-levels { display: flex; flex-direction: column; gap: 6px; }
+
+  .drill-level { display: flex; align-items: center; }
+
+  .drill-box {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-mid);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .drill-count {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  /* WEEKLY BARS */
+  .weekly-bars { display: flex; flex-direction: column; gap: 8px; }
+
+  .w-bar-row { display: flex; align-items: center; gap: 10px; }
+  .w-bar-label { font-size: 11px; color: var(--text-dim); width: 80px; }
+  .w-bar-track { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .w-bar-fill { height: 100%; border-radius: 3px; }
+  .w-bar-val { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; min-width: 24px; text-align: right; }
+
+  /* LEAD PROGRESS */
+  .lead-progress-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .lp-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px;
+    text-align: center;
+  }
+
+  .lp-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 3px;
+  }
+
+  .lp-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .footer {
+    margin-top: 14px;
+    text-align: center;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <h1>Fidelitus Corp</h1>
+    <h2>MD Dashboard</h2>
+  </div>
+  <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
+    <span class="badge badge-gold">● PRIMARY</span>
+    <span class="badge badge-blue">● SECONDARY</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PRIMARY ═══ -->
+<div class="section-label" style="color:var(--accent)">
+  <span style="color:var(--accent)">● Primary — Monitored Daily</span>
+</div>
+
+<!-- ROW 1: Revenue Overview + Vertical Breakdown -->
+<div class="grid-3-1">
+
+  <!-- CARD: Revenue Overview -->
+  <div class="card gold">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="dot" style="background:var(--accent)"></span>
+        Revenue Overview
+      </div>
+      <div class="time-filter">
+        <button class="tf-btn active" onclick="setFilter(this)">Day</button>
+        <button class="tf-btn" onclick="setFilter(this)">Week</button>
+        <button class="tf-btn" onclick="setFilter(this)">Month</button>
+        <button class="tf-btn" onclick="setFilter(this)">Qtr</button>
+        <button class="tf-btn" onclick="setFilter(this)">Year</button>
+      </div>
+    </div>
+    <div class="metric-row">
+      <div class="metric">
+        <div class="metric-label">Revenue vs Target</div>
+        <div class="metric-value" style="color:var(--accent)">₹84L</div>
+        <div class="metric-sub">Target: ₹1Cr</div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:84%; background:var(--accent)"></div>
+        </div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Invoices Raised</div>
+        <div class="metric-value" style="color:var(--accent2)">126</div>
+        <div class="metric-sub">Total raised</div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:72%; background:var(--accent2)"></div>
+        </div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Pending Invoices</div>
+        <div class="metric-value" style="color:var(--accent4)">34</div>
+        <div class="metric-sub">₹18L pending</div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:27%; background:var(--accent4)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD: Revenue by Vertical -->
+  <div class="card green">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="dot" style="background:var(--accent3)"></span>
+        Revenue by Vertical
+      </div>
+      <div class="time-filter">
+        <button class="tf-btn active" onclick="setFilter(this)">Day</button>
+        <button class="tf-btn" onclick="setFilter(this)">Week</button>
+        <button class="tf-btn" onclick="setFilter(this)">Month</button>
+        <button class="tf-btn" onclick="setFilter(this)">Qtr</button>
+        <button class="tf-btn" onclick="setFilter(this)">Year</button>
+      </div>
+    </div>
+    <div class="vertical-item">
+      <span class="v-name">HR</span>
+      <div class="v-bar-wrap"><div class="v-bar" style="width:35%; background:#10b981;"></div></div>
+      <span class="v-pct" style="color:#10b981">35%</span>
+    </div>
+    <div class="vertical-item">
+      <span class="v-name">Transaction</span>
+      <div class="v-bar-wrap"><div class="v-bar" style="width:28%; background:#3b82f6;"></div></div>
+      <span class="v-pct" style="color:#3b82f6">28%</span>
+    </div>
+    <div class="vertical-item">
+      <span class="v-name">FMS</span>
+      <div class="v-bar-wrap"><div class="v-bar" style="width:18%; background:#e8a838;"></div></div>
+      <span class="v-pct" style="color:#e8a838">18%</span>
+    </div>
+    <div class="vertical-item">
+      <span class="v-name">Projects</span>
+      <div class="v-bar-wrap"><div class="v-bar" style="width:12%; background:#a855f7;"></div></div>
+      <span class="v-pct" style="color:#a855f7">12%</span>
+    </div>
+    <div class="vertical-item">
+      <span class="v-name">Gallery</span>
+      <div class="v-bar-wrap"><div class="v-bar" style="width:7%; background:#f43f5e;"></div></div>
+      <span class="v-pct" style="color:#f43f5e">7%</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ROW 2: Leads Monitoring -->
+<div style="margin-bottom:12px;">
+  <div class="card blue">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="dot" style="background:var(--accent2)"></span>
+        Leads Monitoring — Corp → Verticals
+      </div>
+      <div class="time-filter">
+        <button class="tf-btn active" onclick="setFilter(this)">Day</button>
+        <button class="tf-btn" onclick="setFilter(this)">Week</button>
+        <button class="tf-btn" onclick="setFilter(this)">Month</button>
+        <button class="tf-btn" onclick="setFilter(this)">Qtr</button>
+        <button class="tf-btn" onclick="setFilter(this)">Year</button>
+      </div>
+    </div>
+    <div class="leads-flow">
+      <div class="lead-stage">
+        <div class="lead-stage-label">Corp Leads</div>
+        <div class="lead-stage-value" style="color:var(--accent)">148</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="lead-stage">
+        <div class="lead-stage-label">Distributed</div>
+        <div class="lead-stage-value" style="color:var(--accent2)">131</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="lead-stage">
+        <div class="lead-stage-label">Converted</div>
+        <div class="lead-stage-value" style="color:var(--accent3)">89</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="lead-stage">
+        <div class="lead-stage-label">In Progress</div>
+        <div class="lead-stage-value" style="color:var(--accent4)">42</div>
+      </div>
+    </div>
+    <div style="font-size:9px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:7px;">Leads per vertical</div>
+    <div class="lv-chips">
+      <div class="lv-chip"><span style="color:#10b981">48</span>HR</div>
+      <div class="lv-chip"><span style="color:#3b82f6">37</span>Trans.</div>
+      <div class="lv-chip"><span style="color:#e8a838">24</span>FMS</div>
+      <div class="lv-chip"><span style="color:#a855f7">16</span>Projects</div>
+      <div class="lv-chip"><span style="color:#f43f5e">6</span>Gallery</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SECONDARY ═══ -->
+<div class="section-label" style="color:var(--accent2); margin-top:8px;">
+  <span style="color:var(--accent2)">● Secondary — Monitored Periodically</span>
+</div>
+
+<div class="grid-3">
+
+  <!-- CARD: Sales Pipeline -->
+  <div class="card gold">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="dot" style="background:var(--accent)"></span>
+        Sales Pipeline
+      </div>
+      <div class="time-filter">
+        <button class="tf-btn active" onclick="setFilter(this)">Week</button>
+        <button class="tf-btn" onclick="setFilter(this)">Month</button>
+        <button class="tf-btn" onclick="setFilter(this)">Qtr</button>
+        <button class="tf-btn" onclick="setFilter(this)">Year</button>
+      </div>
+    </div>
+    <div class="pipeline-steps">
+      <div class="pipe-step">
+        <span class="pipe-icon">📅</span>
+        <span class="pipe-label">Total Meetings</span>
+        <span class="pipe-val" style="color:var(--accent)">214</span>
+      </div>
+      <div class="pipe-arrow">↓</div>
+      <div class="pipe-step">
+        <span class="pipe-icon">✅</span>
+        <span class="pipe-label">Succeeded / Won</span>
+        <span class="pipe-val" style="color:var(--accent3)">89</span>
+      </div>
+      <div class="pipe-arrow">↓</div>
+      <div class="pipe-step">
+        <span class="pipe-icon">💳</span>
+        <span class="pipe-label">Deal Payments</span>
+        <span class="pipe-val" style="color:var(--accent2)">₹62L</span>
+      </div>
+      <div class="pipe-arrow">↓</div>
+      <div class="pipe-step">
+        <span class="pipe-icon">🎯</span>
+        <span class="pipe-label">Target Achieved</span>
+        <span class="pipe-val" style="color:var(--accent)">84%</span>
+      </div>
+      <div class="pipe-arrow">↓</div>
+      <div class="pipe-step">
+        <span class="pipe-icon">📈</span>
+        <span class="pipe-label">Expansions</span>
+        <span class="pipe-val" style="color:var(--accent3)">12</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD: Performance Drill Down (NO time filter — structural) -->
+  <div class="card purple">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="dot" style="background:var(--purple)"></span>
+        Performance Drill Down
+      </div>
+    </div>
+    <div style="font-size:9px; color:var(--text-dim); margin-bottom:12px; letter-spacing:1px;">OVERVIEW → VERTICAL → TEAM → INDIVIDUAL</div>
+    <div class="drill-levels">
+      <div class="drill-level">
+        <div class="drill-box" style="border-color:rgba(168,85,247,0.3)">
+          <span>🏢 All Verticals</span>
+          <span class="drill-count" style="color:var(--purple)">5</span>
+        </div>
+      </div>
+      <div style="padding-left:16px; color:var(--text-dim); font-size:11px;">↓</div>
+      <div class="drill-level" style="padding-left:16px;">
+        <div class="drill-box">
+          <span>📂 Vertical</span>
+          <span class="drill-count" style="color:var(--purple)">HR / Trans / FMS...</span>
+        </div>
+      </div>
+      <div style="padding-left:32px; color:var(--text-dim); font-size:11px;">↓</div>
+      <div class="drill-level" style="padding-left:32px;">
+        <div class="drill-box">
+          <span>👥 Team</span>
+          <span class="drill-count" style="color:var(--purple)">N Teams</span>
+        </div>
+      </div>
+      <div style="padding-left:48px; color:var(--text-dim); font-size:11px;">↓</div>
+      <div class="drill-level" style="padding-left:48px;">
+        <div class="drill-box">
+          <span>👤 Individual</span>
+          <span class="drill-count" style="color:var(--purple)">Per Person</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:12px; font-size:9px; color:var(--text-dim); font-style:italic;">* No time filter — structural view</div>
+  </div>
+
+  <!-- CARD: Weekly Corp Deals + Lead Progress -->
+  <div class="card green">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="dot" style="background:var(--accent3)"></span>
+        Corp Deals & Lead Progress
+      </div>
+      <div class="time-filter">
+        <button class="tf-btn active" onclick="setFilter(this)">Week</button>
+        <button class="tf-btn" onclick="setFilter(this)">Month</button>
+        <button class="tf-btn" onclick="setFilter(this)">Qtr</button>
+      </div>
+    </div>
+    <div style="font-size:9px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Team Contributions</div>
+    <div class="weekly-bars">
+      <div class="w-bar-row">
+        <span class="w-bar-label">HR</span>
+        <div class="w-bar-track"><div class="w-bar-fill" style="width:80%; background:#10b981;"></div></div>
+        <span class="w-bar-val" style="color:#10b981">12</span>
+      </div>
+      <div class="w-bar-row">
+        <span class="w-bar-label">Transaction</span>
+        <div class="w-bar-track"><div class="w-bar-fill" style="width:60%; background:#3b82f6;"></div></div>
+        <span class="w-bar-val" style="color:#3b82f6">9</span>
+      </div>
+      <div class="w-bar-row">
+        <span class="w-bar-label">FMS</span>
+        <div class="w-bar-track"><div class="w-bar-fill" style="width:40%; background:#e8a838;"></div></div>
+        <span class="w-bar-val" style="color:#e8a838">6</span>
+      </div>
+      <div class="w-bar-row">
+        <span class="w-bar-label">Projects</span>
+        <div class="w-bar-track"><div class="w-bar-fill" style="width:27%; background:#a855f7;"></div></div>
+        <span class="w-bar-val" style="color:#a855f7">4</span>
+      </div>
+      <div class="w-bar-row">
+        <span class="w-bar-label">Gallery</span>
+        <div class="w-bar-track"><div class="w-bar-fill" style="width:13%; background:#f43f5e;"></div></div>
+        <span class="w-bar-val" style="color:#f43f5e">2</span>
+      </div>
+    </div>
+
+    <div class="lead-progress-row">
+      <div class="lp-box">
+        <div class="lp-val" style="color:var(--accent)">42</div>
+        <div class="lp-label">In Progress</div>
+      </div>
+      <div class="lp-box">
+        <div class="lp-val" style="color:var(--accent3)">17</div>
+        <div class="lp-label">Closing Soon</div>
+      </div>
+      <div class="lp-box">
+        <div class="lp-val" style="color:var(--accent4)">8</div>
+        <div class="lp-label">Stalled</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Fidelitus Corp · MD Dashboard · All figures are illustrative placeholders
+</div>
+
+<script>
+  function setFilter(btn) {
+    const group = btn.closest('.time-filter');
+    group.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

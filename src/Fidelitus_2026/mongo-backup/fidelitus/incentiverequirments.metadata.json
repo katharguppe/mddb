@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"year":{"$numberInt":"1"}},"name":"year_1","background":true,"unique":true}],"uuid":"48a20d44126a4ac183b0c37198f6afe5","collectionName":"incentiverequirments","type":"collection"}
