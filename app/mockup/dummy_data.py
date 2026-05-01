@@ -7,8 +7,8 @@ DASHBOARD_DATA = {
         "kpis": [
             {
                 "label": "Target for Year",
-                "value": "Rs.320 Cr",
-                "target": "Rs.320 Cr",
+                "value": "Rs.240 Cr",
+                "target": "Rs.240 Cr",
                 "pct": None,
                 "delta": None,
             },
@@ -24,7 +24,7 @@ DASHBOARD_DATA = {
                 "value": "Rs.108 Cr",
                 "target": "Rs.320 Cr",
                 "pct": 34,
-                "delta": None,
+                "delta": "up",
             },
             {
                 "label": "Payments Received",
@@ -380,15 +380,29 @@ AGING_DATA = {
 }
 
 # Corporate aggregate: flatten all company items per bucket
+def _parse_cr(total_str):
+    """Extract numeric Cr value from strings like 'Rs.2.1 Cr', 'Rs.0.9 Cr', 'Rs.0'."""
+    import re
+    m = re.search(r"Rs\.([\d.]+)\s*Cr", total_str)
+    if m:
+        return float(m.group(1))
+    return 0.0
+
 def _build_corporate_aging():
     buckets = ["7d", "14d", "21d", "90d", "npa"]
     result = {}
     for bucket in buckets:
         items = []
+        total_cr = 0.0
         for slug_data in AGING_DATA.values():
             items.extend(slug_data[bucket]["items"])
-        count = sum(len(slug_data[bucket]["items"]) for slug_data in AGING_DATA.values())
-        result[bucket] = {"count": count, "items": items, "total": f"{count} items"}
+            total_cr += _parse_cr(slug_data[bucket]["total"])
+        count = len(items)
+        if total_cr > 0:
+            total_str = f"Rs.{total_cr:.1f} Cr"
+        else:
+            total_str = "Rs.0"
+        result[bucket] = {"count": count, "items": items, "total": total_str}
     return result
 
 # NOTE: must be called before pipeline_* entries are added — iterates AGING_DATA.values()
@@ -406,8 +420,46 @@ def _empty_pipeline_bucket():
 
 AGING_DATA["pipeline_leads"]     = _empty_pipeline_bucket()
 AGING_DATA["pipeline_meetings"]  = _empty_pipeline_bucket()
-AGING_DATA["pipeline_proposals"] = _empty_pipeline_bucket()
-AGING_DATA["pipeline_orders"]    = _empty_pipeline_bucket()
+AGING_DATA["pipeline_proposals"] = {
+    "7d": {
+        "count": 2,
+        "total": "Rs.4.0 Cr",
+        "items": [
+            {"company": "Fidelitus Transactions", "member": "Priya Menon",   "value": "Rs.2.2 Cr", "days": 6,  "reason": "Client committee review delayed, decision by Mon"},
+            {"company": "Fidelitus Projects",     "member": "Arjun Shetty",  "value": "Rs.1.8 Cr", "days": 5,  "reason": "Technical annexure revision requested"},
+        ],
+    },
+    "14d": {
+        "count": 1,
+        "total": "Rs.1.5 Cr",
+        "items": [
+            {"company": "Fidelitus FMS",          "member": "Anil Kapoor",   "value": "Rs.1.5 Cr", "days": 12, "reason": "Procurement team awaiting legal clearance"},
+        ],
+    },
+    "21d": {"count": 0, "total": "Rs.0", "items": []},
+    "90d": {"count": 0, "total": "Rs.0", "items": []},
+    "npa": {"count": 0, "total": "Rs.0", "items": []},
+}
+AGING_DATA["pipeline_orders"] = {
+    "7d": {
+        "count": 2,
+        "total": "Rs.5.5 Cr",
+        "items": [
+            {"company": "Fidelitus Transactions", "member": "Rajesh Kumar",  "value": "Rs.3.0 Cr", "days": 4,  "reason": "LOI signed, agreement drafting in progress"},
+            {"company": "Fidelitus GCC Nexus",    "member": "Aditya Sharma", "value": "Rs.2.5 Cr", "days": 7,  "reason": "Client board approval pending"},
+        ],
+    },
+    "14d": {
+        "count": 1,
+        "total": "Rs.2.0 Cr",
+        "items": [
+            {"company": "Fidelitus Projects",     "member": "Deepa Thomas",  "value": "Rs.2.0 Cr", "days": 11, "reason": "Stamp duty payment held pending registration slot"},
+        ],
+    },
+    "21d": {"count": 0, "total": "Rs.0", "items": []},
+    "90d": {"count": 0, "total": "Rs.0", "items": []},
+    "npa": {"count": 0, "total": "Rs.0", "items": []},
+}
 AGING_DATA["pipeline_invoices"]  = _empty_pipeline_bucket()
 AGING_DATA["pipeline_collections"] = {
     "7d": {
@@ -445,5 +497,170 @@ AGING_DATA["pipeline_collections"] = {
                 "reason":  "Negotiations ongoing",
             },
         ],
+    },
+}
+
+# KPI drill-down detail rows per company.
+# Keys: revenue, invoiced, meetings, proposals.
+# (payments drill-down is handled by AGING_DATA)
+KPI_DETAILS = {
+    "transactions": {
+        "revenue": {"items": [
+            {"client": "Prestige Office Park",   "bd": "Rajesh Kumar",  "value": "Rs.15 Cr", "type": "Commercial Lease", "status": "Closed"},
+            {"client": "Embassy Business Hub",   "bd": "Priya Menon",   "value": "Rs.12 Cr", "type": "Commercial Sale",  "status": "Closed"},
+            {"client": "Brigade Tech Park",      "bd": "Anand Rao",     "value": "Rs.10 Cr", "type": "Commercial Lease", "status": "Closed"},
+            {"client": "Sobha Silicon Oaks",     "bd": "Suresh Nair",   "value": "Rs.9 Cr",  "type": "Commercial Lease", "status": "Closed"},
+            {"client": "RMZ Infinity",           "bd": "Kavitha Reddy", "value": "Rs.8 Cr",  "type": "Commercial Lease", "status": "Closed"},
+            {"client": "Salarpuria Sattva",      "bd": "Vikram Singh",  "value": "Rs.7 Cr",  "type": "Office Lease",     "status": "Committed"},
+            {"client": "Bagmane Tech Park",      "bd": "Mohan Das",     "value": "Rs.7 Cr",  "type": "Office Sale",      "status": "Committed"},
+        ]},
+        "invoiced": {"items": [
+            {"client": "Prestige Office Park",   "ref": "INV-TR-0142", "amount": "Rs.15 Cr", "date": "10 Mar", "status": "Paid"},
+            {"client": "Embassy Business Hub",   "ref": "INV-TR-0138", "amount": "Rs.12 Cr", "date": "15 Mar", "status": "Paid"},
+            {"client": "Brigade Tech Park",      "ref": "INV-TR-0155", "amount": "Rs.10 Cr", "date": "01 Apr", "status": "Pending"},
+            {"client": "Sobha Silicon Oaks",     "ref": "INV-TR-0161", "amount": "Rs.9 Cr",  "date": "05 Apr", "status": "Pending"},
+            {"client": "RMZ Infinity",           "ref": "INV-TR-0168", "amount": "Rs.8 Cr",  "date": "12 Apr", "status": "Sent"},
+        ]},
+        "meetings": {"items": [
+            {"client": "Prestige Group",         "bd": "Rajesh Kumar",  "date": "28 Apr", "type": "Site Review",           "next_step": "Shortlisted alternate floor"},
+            {"client": "Embassy Group",          "bd": "Priya Menon",   "date": "25 Apr", "type": "Deal Review",           "next_step": "LOI to be issued by Fri"},
+            {"client": "RMZ Corp",               "bd": "Anand Rao",     "date": "24 Apr", "type": "Proposal Presentation", "next_step": "Awaiting internal approval"},
+            {"client": "Bagmane Developers",     "bd": "Suresh Nair",   "date": "22 Apr", "type": "Requirement Call",      "next_step": "20,000 sqft office search open"},
+            {"client": "Brigade Group",          "bd": "Kavitha Reddy", "date": "21 Apr", "type": "Follow-up",             "next_step": "Agreement signing next week"},
+        ]},
+        "proposals": {"items": [
+            {"client": "RMZ Corp",               "bd": "Priya Menon",   "value": "Rs.22 Cr", "submitted": "10 Apr", "status": "Under Review"},
+            {"client": "L&T Realty",             "bd": "Rajesh Kumar",  "value": "Rs.18 Cr", "submitted": "05 Apr", "status": "Shortlisted"},
+            {"client": "Manyata Tech Park",      "bd": "Anand Rao",     "value": "Rs.15 Cr", "submitted": "15 Apr", "status": "Pending"},
+            {"client": "Bagmane Developers",     "bd": "Suresh Nair",   "value": "Rs.12 Cr", "submitted": "20 Apr", "status": "Submitted"},
+            {"client": "Tata Realty",            "bd": "Vikram Singh",  "value": "Rs.9 Cr",  "submitted": "25 Apr", "status": "Submitted"},
+        ]},
+    },
+    "projects": {
+        "revenue": {"items": [
+            {"client": "Godrej Properties",      "bd": "Arjun Shetty",  "value": "Rs.8 Cr",  "type": "Project Mgmt",     "status": "Closed"},
+            {"client": "Puravankara",            "bd": "Deepa Thomas",  "value": "Rs.6 Cr",  "type": "Construction Mgmt","status": "Closed"},
+            {"client": "Shriram Properties",     "bd": "Kiran Joshi",   "value": "Rs.5 Cr",  "type": "Project Mgmt",     "status": "Closed"},
+            {"client": "Assetz Property",        "bd": "Meera Pillai",  "value": "Rs.5 Cr",  "type": "Fit-Out Mgmt",     "status": "Committed"},
+            {"client": "Arvind SmartSpaces",     "bd": "Rahul Verma",   "value": "Rs.5 Cr",  "type": "Project Mgmt",     "status": "Committed"},
+        ]},
+        "invoiced": {"items": [
+            {"client": "Godrej Properties",      "ref": "INV-PJ-0081", "amount": "Rs.8 Cr",  "date": "12 Mar", "status": "Paid"},
+            {"client": "Puravankara",            "ref": "INV-PJ-0076", "amount": "Rs.6 Cr",  "date": "20 Mar", "status": "Pending"},
+            {"client": "Shriram Properties",     "ref": "INV-PJ-0089", "amount": "Rs.5 Cr",  "date": "02 Apr", "status": "Pending"},
+            {"client": "Assetz Property",        "ref": "INV-PJ-0094", "amount": "Rs.2 Cr",  "date": "18 Apr", "status": "Sent"},
+        ]},
+        "meetings": {"items": [
+            {"client": "Godrej Properties",      "bd": "Arjun Shetty",  "date": "27 Apr", "type": "Milestone Review",    "next_step": "Phase 2 kickoff in May"},
+            {"client": "Puravankara",            "bd": "Deepa Thomas",  "date": "24 Apr", "type": "Site Inspection",     "next_step": "Snagging list to be closed"},
+            {"client": "Shriram Properties",     "bd": "Kiran Joshi",   "date": "22 Apr", "type": "Progress Review",     "next_step": "Completion cert by 15 May"},
+            {"client": "Arvind SmartSpaces",     "bd": "Rahul Verma",   "date": "19 Apr", "type": "Kick-off",            "next_step": "Resource mobilisation this week"},
+        ]},
+        "proposals": {"items": [
+            {"client": "Mahindra Lifespaces",    "bd": "Arjun Shetty",  "value": "Rs.12 Cr", "submitted": "08 Apr", "status": "Under Review"},
+            {"client": "Kolte-Patil",            "bd": "Deepa Thomas",  "value": "Rs.9 Cr",  "submitted": "14 Apr", "status": "Shortlisted"},
+            {"client": "Century Real Estate",    "bd": "Kiran Joshi",   "value": "Rs.7 Cr",  "submitted": "22 Apr", "status": "Submitted"},
+            {"client": "Nitesh Estates",         "bd": "Meera Pillai",  "value": "Rs.5 Cr",  "submitted": "28 Apr", "status": "Submitted"},
+        ]},
+    },
+    "fms": {
+        "revenue": {"items": [
+            {"client": "KPMG India",             "bd": "Anil Kapoor",   "value": "Rs.5 Cr",  "type": "FMS Annual",       "status": "Closed"},
+            {"client": "Infosys BPM",            "bd": "Sneha Iyer",    "value": "Rs.4 Cr",  "type": "FMS Annual",       "status": "Closed"},
+            {"client": "Wipro Technologies",     "bd": "Ramesh Gupta",  "value": "Rs.5 Cr",  "type": "FMS Annual",       "status": "Closed"},
+            {"client": "Mphasis",                "bd": "Lata Srinivas", "value": "Rs.4 Cr",  "type": "FMS Quarterly",    "status": "Closed"},
+            {"client": "UST Global",             "bd": "Gopal Nair",    "value": "Rs.3 Cr",  "type": "FMS Monthly",      "status": "Committed"},
+            {"client": "Mindtree",               "bd": "Anil Kapoor",   "value": "Rs.3 Cr",  "type": "FMS Annual",       "status": "Committed"},
+        ]},
+        "invoiced": {"items": [
+            {"client": "KPMG India",             "ref": "INV-FM-0201", "amount": "Rs.5 Cr",  "date": "01 Apr", "status": "Paid"},
+            {"client": "Infosys BPM",            "ref": "INV-FM-0198", "amount": "Rs.4 Cr",  "date": "01 Apr", "status": "Paid"},
+            {"client": "Wipro Technologies",     "ref": "INV-FM-0205", "amount": "Rs.5 Cr",  "date": "01 Apr", "status": "Pending"},
+            {"client": "Mphasis",                "ref": "INV-FM-0210", "amount": "Rs.3 Cr",  "date": "01 Apr", "status": "Pending"},
+            {"client": "UST Global",             "ref": "INV-FM-0214", "amount": "Rs.2 Cr",  "date": "15 Apr", "status": "Sent"},
+        ]},
+        "meetings": {"items": [
+            {"client": "KPMG India",             "bd": "Anil Kapoor",   "date": "29 Apr", "type": "Quarterly Review",   "next_step": "Pest control scope to be added"},
+            {"client": "Wipro Technologies",     "bd": "Ramesh Gupta",  "date": "26 Apr", "type": "Facility Audit",     "next_step": "HVAC maintenance schedule"},
+            {"client": "Mphasis",                "bd": "Lata Srinivas", "date": "23 Apr", "type": "Contract Renewal",   "next_step": "Revised SOW by 10 May"},
+            {"client": "UST Global",             "bd": "Gopal Nair",    "date": "20 Apr", "type": "Onboarding",         "next_step": "Staff deployment this month"},
+        ]},
+        "proposals": {"items": [
+            {"client": "Accenture India",        "bd": "Anil Kapoor",   "value": "Rs.6 Cr",  "submitted": "05 Apr", "status": "Under Review"},
+            {"client": "Capgemini",              "bd": "Sneha Iyer",    "value": "Rs.4 Cr",  "submitted": "12 Apr", "status": "Shortlisted"},
+            {"client": "NTT Data",               "bd": "Ramesh Gupta",  "value": "Rs.3 Cr",  "submitted": "20 Apr", "status": "Submitted"},
+        ]},
+    },
+    "hrlabs": {
+        "revenue": {"items": [
+            {"client": "Deutsche Bank",          "bd": "Preethi Nair",  "value": "Rs.2 Cr",  "type": "Executive Search", "status": "Closed"},
+            {"client": "Goldman Sachs",          "bd": "Santosh Kumar", "value": "Rs.2 Cr",  "type": "Bulk Staffing",    "status": "Closed"},
+            {"client": "JP Morgan Chase",        "bd": "Divya Menon",   "value": "Rs.2 Cr",  "type": "Staffing Contract","status": "Closed"},
+            {"client": "HSBC",                   "bd": "Naresh Patel",  "value": "Rs.2 Cr",  "type": "RPO Contract",     "status": "Closed"},
+            {"client": "Barclays",               "bd": "Shobha Rao",    "value": "Rs.2 Cr",  "type": "Staffing Contract","status": "Committed"},
+            {"client": "Standard Chartered",     "bd": "Preethi Nair",  "value": "Rs.1 Cr",  "type": "Executive Search", "status": "Committed"},
+        ]},
+        "invoiced": {"items": [
+            {"client": "Deutsche Bank",          "ref": "INV-HR-0312", "amount": "Rs.2 Cr",  "date": "05 Apr", "status": "Paid"},
+            {"client": "Goldman Sachs",          "ref": "INV-HR-0308", "amount": "Rs.2 Cr",  "date": "08 Apr", "status": "Pending"},
+            {"client": "JP Morgan Chase",        "ref": "INV-HR-0315", "amount": "Rs.2 Cr",  "date": "12 Apr", "status": "Pending"},
+            {"client": "HSBC",                   "ref": "INV-HR-0319", "amount": "Rs.1 Cr",  "date": "18 Apr", "status": "Sent"},
+            {"client": "Barclays",               "ref": "INV-HR-0322", "amount": "Rs.1 Cr",  "date": "25 Apr", "status": "Sent"},
+        ]},
+        "meetings": {"items": [
+            {"client": "Deutsche Bank",          "bd": "Preethi Nair",  "date": "28 Apr", "type": "Quarterly Review",   "next_step": "20 more positions to open in Q2"},
+            {"client": "Goldman Sachs",          "bd": "Santosh Kumar", "date": "25 Apr", "type": "Placement Follow-up","next_step": "2 joiners pending offer acceptance"},
+            {"client": "Barclays",               "bd": "Shobha Rao",    "date": "22 Apr", "type": "RPO Discussion",     "next_step": "SLA to be signed by 05 May"},
+            {"client": "Standard Chartered",     "bd": "Divya Menon",   "date": "18 Apr", "type": "Requirement Brief",  "next_step": "5 VP-level positions to source"},
+        ]},
+        "proposals": {"items": [
+            {"client": "Citi Bank",              "bd": "Preethi Nair",  "value": "Rs.3 Cr",  "submitted": "07 Apr", "status": "Under Review"},
+            {"client": "BNP Paribas",            "bd": "Santosh Kumar", "value": "Rs.2 Cr",  "submitted": "14 Apr", "status": "Shortlisted"},
+            {"client": "Societe Generale",       "bd": "Naresh Patel",  "value": "Rs.2 Cr",  "submitted": "22 Apr", "status": "Submitted"},
+            {"client": "Credit Suisse",          "bd": "Divya Menon",   "value": "Rs.1 Cr",  "submitted": "28 Apr", "status": "Submitted"},
+        ]},
+    },
+    "technology": {
+        "revenue": {"items": [
+            {"client": "Tata Consultancy",       "bd": "Vikash Mehta",  "value": "Rs.2.5 Cr","type": "CRM Build",        "status": "Closed"},
+            {"client": "Infosys",                "bd": "Rohini Das",    "value": "Rs.2 Cr",  "type": "Portal Dev",       "status": "Closed"},
+            {"client": "Wipro",                  "bd": "Sudhir Bhat",   "value": "Rs.2 Cr",  "type": "Integration",      "status": "Closed"},
+            {"client": "HCL Technologies",       "bd": "Vikash Mehta",  "value": "Rs.1.5 Cr","type": "Mobile App",       "status": "Committed"},
+            {"client": "Tech Mahindra",          "bd": "Rohini Das",    "value": "Rs.1 Cr",  "type": "Analytics",        "status": "Committed"},
+        ]},
+        "invoiced": {"items": [
+            {"client": "Tata Consultancy",       "ref": "INV-TK-0441", "amount": "Rs.2.5 Cr","date": "10 Mar", "status": "Paid"},
+            {"client": "Infosys",                "ref": "INV-TK-0438", "amount": "Rs.2 Cr",  "date": "20 Mar", "status": "Pending"},
+            {"client": "Wipro",                  "ref": "INV-TK-0445", "amount": "Rs.1.5 Cr","date": "05 Apr", "status": "Pending"},
+        ]},
+        "meetings": {"items": [
+            {"client": "Tata Consultancy",       "bd": "Vikash Mehta",  "date": "27 Apr", "type": "UAT Review",         "next_step": "Sign-off expected by 05 May"},
+            {"client": "HCL Technologies",       "bd": "Rohini Das",    "date": "23 Apr", "type": "Scope Review",       "next_step": "Module 3 delivery plan to share"},
+            {"client": "Tech Mahindra",          "bd": "Sudhir Bhat",   "date": "21 Apr", "type": "Demo",               "next_step": "POC approval in committee next week"},
+        ]},
+        "proposals": {"items": [
+            {"client": "Mindtree",               "bd": "Vikash Mehta",  "value": "Rs.3 Cr",  "submitted": "09 Apr", "status": "Under Review"},
+            {"client": "Mphasis",                "bd": "Rohini Das",    "value": "Rs.2 Cr",  "submitted": "17 Apr", "status": "Shortlisted"},
+            {"client": "NIIT Technologies",      "bd": "Sudhir Bhat",   "value": "Rs.1.5 Cr","submitted": "24 Apr", "status": "Submitted"},
+        ]},
+    },
+    "gcc": {
+        "revenue": {"items": [
+            {"client": "Nordea Bank",            "bd": "Aditya Sharma", "value": "Rs.1 Cr",  "type": "GCC Advisory",    "status": "Closed"},
+            {"client": "Alstom",                 "bd": "Aditya Sharma", "value": "Rs.0",      "type": "GCC Setup",       "status": "In Pipeline"},
+        ]},
+        "invoiced": {"items": [
+            {"client": "Nordea Bank",            "ref": "INV-GC-0021", "amount": "Rs.0",      "date": "--",     "status": "Pending"},
+        ]},
+        "meetings": {"items": [
+            {"client": "Nordea Bank",            "bd": "Aditya Sharma", "date": "26 Apr", "type": "Feasibility",        "next_step": "Site visit scheduled for 10 May"},
+            {"client": "Alstom",                 "bd": "Aditya Sharma", "date": "22 Apr", "type": "Introduction",       "next_step": "RFP expected in 2 weeks"},
+            {"client": "Hitachi Energy",         "bd": "Aditya Sharma", "date": "18 Apr", "type": "Requirement Call",   "next_step": "Proposal to be sent by 05 May"},
+        ]},
+        "proposals": {"items": [
+            {"client": "Alstom",                 "bd": "Aditya Sharma", "value": "Rs.8 Cr",  "submitted": "15 Apr", "status": "Under Review"},
+            {"client": "Hitachi Energy",         "bd": "Aditya Sharma", "value": "Rs.6 Cr",  "submitted": "28 Apr", "status": "Submitted"},
+            {"client": "ABB India",              "bd": "Aditya Sharma", "value": "Rs.5 Cr",  "submitted": "30 Apr", "status": "Submitted"},
+        ]},
     },
 }
