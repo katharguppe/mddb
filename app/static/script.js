@@ -6,7 +6,7 @@ function toggleDetails(id) {
     panel.classList.toggle('open');
 
     // Update button text
-    const btn = document.querySelector('.company-card .btn-know-more[onclick*="' + id + '"]');
+    const btn = document.querySelector('.company-card .btn-know-more[onclick="toggleDetails(\'' + id + '\')"]');
     if (btn) btn.textContent = isOpen ? 'Know More \u2192' : 'Close \u2191';
 
     if (!isOpen) {
