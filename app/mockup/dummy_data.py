@@ -129,6 +129,68 @@ DASHBOARD_DATA = {
             ],
         },
     ],
+    "pipeline": [
+        {
+            "id":        "pipeline_leads",
+            "stage":     "Leads",
+            "count":     42,
+            "target":    50,
+            "pct":       84,
+            "delta_dir": "up",
+            "delta_val": "+7 WoW",
+            "value":     None,
+        },
+        {
+            "id":        "pipeline_meetings",
+            "stage":     "Meetings",
+            "count":     18,
+            "target":    25,
+            "pct":       72,
+            "delta_dir": "up",
+            "delta_val": "+3 WoW",
+            "value":     None,
+        },
+        {
+            "id":        "pipeline_proposals",
+            "stage":     "Proposals",
+            "count":     11,
+            "target":    15,
+            "pct":       73,
+            "delta_dir": "up",
+            "delta_val": "+2 WoW",
+            "value":     "Rs.38 Cr",
+        },
+        {
+            "id":        "pipeline_orders",
+            "stage":     "Orders",
+            "count":     6,
+            "target":    10,
+            "pct":       60,
+            "delta_dir": "up",
+            "delta_val": "+1 WoW",
+            "value":     "Rs.24 Cr",
+        },
+        {
+            "id":        "pipeline_invoices",
+            "stage":     "Invoices",
+            "count":     4,
+            "target":    8,
+            "pct":       50,
+            "delta_dir": "none",
+            "delta_val": "0 WoW",
+            "value":     "Rs.18 Cr",
+        },
+        {
+            "id":        "pipeline_collections",
+            "stage":     "Collections",
+            "count":     3,
+            "target":    6,
+            "pct":       50,
+            "delta_dir": "down",
+            "delta_val": "-1 WoW",
+            "value":     "Rs.9 Cr",
+        },
+    ],
 }
 
 # Aging data: committed but not delivered, grouped by overdue bucket.
@@ -330,3 +392,57 @@ def _build_corporate_aging():
     return result
 
 AGING_DATA["corporate"] = _build_corporate_aging()
+
+# ── Pipeline aging (per stage) ──────────────────────────────────────────────
+def _empty_pipeline_bucket():
+    return {
+        "7d":  {"count": 0, "total": "Rs.0", "items": []},
+        "14d": {"count": 0, "total": "Rs.0", "items": []},
+        "21d": {"count": 0, "total": "Rs.0", "items": []},
+        "90d": {"count": 0, "total": "Rs.0", "items": []},
+        "npa": {"count": 0, "total": "Rs.0", "items": []},
+    }
+
+AGING_DATA["pipeline_leads"]     = _empty_pipeline_bucket()
+AGING_DATA["pipeline_meetings"]  = _empty_pipeline_bucket()
+AGING_DATA["pipeline_proposals"] = _empty_pipeline_bucket()
+AGING_DATA["pipeline_orders"]    = _empty_pipeline_bucket()
+AGING_DATA["pipeline_invoices"]  = _empty_pipeline_bucket()
+AGING_DATA["pipeline_collections"] = {
+    "7d": {
+        "count": 2,
+        "total": "Rs.3.2 Cr",
+        "items": [
+            {
+                "company": "Fidelitus Transactions",
+                "member":  "Amit Shah",
+                "value":   "Rs.2 Cr",
+                "days":    5,
+                "reason":  "Payment by EOM confirmed",
+            },
+            {
+                "company": "Fidelitus Projects",
+                "member":  "Deepa Iyer",
+                "value":   "Rs.1.2 Cr",
+                "days":    7,
+                "reason":  "Client OOO till Friday",
+            },
+        ],
+    },
+    "14d": {"count": 0, "total": "Rs.0", "items": []},
+    "21d": {"count": 0, "total": "Rs.0", "items": []},
+    "90d": {"count": 0, "total": "Rs.0", "items": []},
+    "npa": {
+        "count": 1,
+        "total": "Rs.2.1 Cr",
+        "items": [
+            {
+                "company": "Fidelitus GCC Nexus",
+                "member":  "Kiran Bhat",
+                "value":   "Rs.2.1 Cr",
+                "days":    95,
+                "reason":  "Negotiations ongoing",
+            },
+        ],
+    },
+}
