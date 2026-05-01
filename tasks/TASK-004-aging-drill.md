@@ -1,6 +1,6 @@
 # TASK-004 -- Aging Drill-Down Panel
 
-**Status:** In Progress
+**Status:** Done
 **Session:** s04 (Phase 0 -- Mockup)
 **Scope:** app/mockup/dummy_data.py, app/templates/dashboard.html,
            app/templates/partials/aging_panel.html (create),
