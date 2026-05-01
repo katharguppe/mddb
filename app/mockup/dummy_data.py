@@ -391,6 +391,7 @@ def _build_corporate_aging():
         result[bucket] = {"count": count, "items": items, "total": f"{count} items"}
     return result
 
+# NOTE: must be called before pipeline_* entries are added — iterates AGING_DATA.values()
 AGING_DATA["corporate"] = _build_corporate_aging()
 
 # ── Pipeline aging (per stage) ──────────────────────────────────────────────
