@@ -29,7 +29,7 @@
 
     {# ── Revenue panel ── #}
     <div class="kpi-tab-panel active" id="kpi-panel-{{ company_id }}-revenue">
-        {% if kpi_details.revenue.items %}
+        {% if kpi_details.revenue['items'] %}
         <table class="kpi-detail-table">
             <thead>
                 <tr>
@@ -37,7 +37,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for item in kpi_details.revenue.items %}
+                {% for item in kpi_details.revenue['items'] %}
                 <tr>
                     <td>{{ item.client }}</td>
                     <td>{{ item.bd }}</td>
@@ -55,7 +55,7 @@
 
     {# ── Invoiced panel ── #}
     <div class="kpi-tab-panel" id="kpi-panel-{{ company_id }}-invoiced">
-        {% if kpi_details.invoiced.items %}
+        {% if kpi_details.invoiced['items'] %}
         <table class="kpi-detail-table">
             <thead>
                 <tr>
@@ -63,7 +63,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for item in kpi_details.invoiced.items %}
+                {% for item in kpi_details.invoiced['items'] %}
                 <tr>
                     <td>{{ item.client }}</td>
                     <td class="kpi-detail-ref">{{ item.ref }}</td>
@@ -86,7 +86,7 @@
 
     {# ── Meetings panel ── #}
     <div class="kpi-tab-panel" id="kpi-panel-{{ company_id }}-meetings">
-        {% if kpi_details.meetings.items %}
+        {% if kpi_details.meetings['items'] %}
         <table class="kpi-detail-table">
             <thead>
                 <tr>
@@ -94,7 +94,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for item in kpi_details.meetings.items %}
+                {% for item in kpi_details.meetings['items'] %}
                 <tr>
                     <td>{{ item.client }}</td>
                     <td>{{ item.bd }}</td>
@@ -112,7 +112,7 @@
 
     {# ── Proposals panel ── #}
     <div class="kpi-tab-panel" id="kpi-panel-{{ company_id }}-proposals">
-        {% if kpi_details.proposals.items %}
+        {% if kpi_details.proposals['items'] %}
         <table class="kpi-detail-table">
             <thead>
                 <tr>
@@ -120,7 +120,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for item in kpi_details.proposals.items %}
+                {% for item in kpi_details.proposals['items'] %}
                 <tr>
                     <td>{{ item.client }}</td>
                     <td>{{ item.bd }}</td>
