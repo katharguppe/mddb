@@ -392,3 +392,167 @@ p {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* ── Aging Panel ── */
+.aging-panel {
+    padding: 0.75rem 1rem 1rem;
+}
+
+/* Target row at top of Know More panel */
+.know-more-target-row {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    padding: 0.5rem 1rem 0;
+    border-top: 1px solid var(--color-border);
+}
+
+/* Bucket pills row */
+.aging-pills {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+    padding-top: 0.5rem;
+}
+
+.aging-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    min-width: 4.5rem;
+    transition: border-color 0.15s, background 0.15s;
+    font-family: var(--font-body);
+}
+
+.aging-pill:hover:not(:disabled) {
+    border-color: var(--color-accent);
+    background: rgba(232, 168, 56, 0.08);
+}
+
+.aging-pill.active {
+    border-color: var(--color-accent);
+    background: rgba(232, 168, 56, 0.12);
+}
+
+.aging-pill--empty,
+.aging-pill:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.aging-pill-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-text-secondary);
+}
+
+.aging-pill.active .aging-pill-label {
+    color: var(--color-accent);
+}
+
+.aging-pill-count {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    line-height: 1;
+}
+
+.aging-pill-total {
+    font-size: 0.65rem;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+}
+
+/* Bucket detail table wrapper -- hidden by default */
+.aging-table-wrapper {
+    display: none;
+    overflow-x: auto;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--color-border);
+    padding-top: 0.5rem;
+}
+
+.aging-table-wrapper.open {
+    display: block;
+}
+
+.aging-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+}
+
+.aging-table th {
+    text-align: left;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-secondary);
+    padding: 0.3rem 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+}
+
+.aging-table td {
+    padding: 0.35rem 0.5rem;
+    color: var(--color-text-primary);
+    border-bottom: 1px solid rgba(48, 54, 61, 0.4);
+    vertical-align: top;
+}
+
+.aging-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.aging-value {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--color-accent);
+    white-space: nowrap;
+}
+
+.aging-days {
+    white-space: nowrap;
+    color: var(--color-red-orange);
+    font-weight: 600;
+}
+
+.aging-reason {
+    color: var(--color-text-secondary);
+    font-style: italic;
+    max-width: 16rem;
+}
+
+/* Fix: deep panels need more max-height */
+.company-details.open {
+    max-height: 800px !important;
+}
+
+/* Corporate aging panel (sits below KPI strip) */
+.corporate-aging-panel {
+    margin-top: 1rem;
+}
+
+.corporate-aging-panel.open {
+    max-height: 1000px !important;
+    border-top: 1px solid var(--color-border);
+}
+
+/* Clickable KPI card signal */
+.kpi-card--clickable {
+    cursor: pointer;
+}
+
+.kpi-card--clickable:hover {
+    border-color: rgba(232, 168, 56, 0.4);
+    background: rgba(232, 168, 56, 0.04);
+    transition: border-color 0.15s, background 0.15s;
+}
