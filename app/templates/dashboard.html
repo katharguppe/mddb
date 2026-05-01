@@ -121,11 +121,12 @@
                     <span class="pct-badge {{ pct_class(stage.pct) }}">{{ stage.pct }}%</span>
                     {% if stage.delta_dir == "up" %}<span class="delta-up">▲</span>
                     {% elif stage.delta_dir == "down" %}<span class="delta-down">▼</span>
+                    {% else %}<span class="delta-none"></span>
                     {% endif %}
                     <span class="pipeline-delta-text">{{ stage.delta_val }}</span>
                 </div>
-                <a class="pipeline-details-link"
-                   onclick="toggleDetails('{{ stage.id }}')">Details →</a>
+                <button class="pipeline-details-link"
+                        onclick="toggleDetails('{{ stage.id }}')">Details →</button>
             </div>
             {% endfor %}
         </div>
