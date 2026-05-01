@@ -18,13 +18,13 @@ with count, target, % badge, WoW delta, and per-stage aging drill-down panel.
 
 ## Checklist
 
-- [ ] Add `PIPELINE_DATA` to `DASHBOARD_DATA` in `dummy_data.py`
-- [ ] Add `AGING_DATA["pipeline_*"]` entries for all 6 stages in `dummy_data.py`
-- [ ] Add Section C to `dashboard.html` (pipeline flow + aging panels)
-- [ ] Add pipeline CSS to `style.css`
-- [ ] Visual check in browser
-- [ ] Commit + PR
+- [x] Add `PIPELINE_DATA` to `DASHBOARD_DATA` in `dummy_data.py`
+- [x] Add `AGING_DATA["pipeline_*"]` entries for all 6 stages in `dummy_data.py`
+- [x] Add Section C to `dashboard.html` (pipeline flow + aging panels)
+- [x] Add pipeline CSS to `style.css`
+- [x] Visual check in browser
+- [x] Commit + PR
 
 ## Status
 
-- [ ] In progress
+- [x] Complete
