@@ -1,0 +1,140 @@
+{# app/templates/partials/kpi_tabs_panel.html
+   Macro: kpi_tabs_panel(company_id, kpi_details, aging)
+   kpi_details = KPI_DETAILS[company_id]
+   aging       = AGING_DATA[company_id]
+#}
+{% from "partials/aging_panel.html" import aging_panel %}
+
+{% macro kpi_tabs_panel(company_id, kpi_details, aging) %}
+<div class="kpi-tabs-container" id="kpi-tabs-{{ company_id }}">
+
+    {# ── Tab strip ── #}
+    <div class="kpi-tab-strip">
+        <button class="kpi-tab active"
+                data-tab="revenue"
+                onclick="switchKpiTab('{{ company_id }}', 'revenue')">Revenue</button>
+        <button class="kpi-tab"
+                data-tab="invoiced"
+                onclick="switchKpiTab('{{ company_id }}', 'invoiced')">Invoiced</button>
+        <button class="kpi-tab"
+                data-tab="payments"
+                onclick="switchKpiTab('{{ company_id }}', 'payments')">Payments</button>
+        <button class="kpi-tab"
+                data-tab="meetings"
+                onclick="switchKpiTab('{{ company_id }}', 'meetings')">Meetings</button>
+        <button class="kpi-tab"
+                data-tab="proposals"
+                onclick="switchKpiTab('{{ company_id }}', 'proposals')">Proposals</button>
+    </div>
+
+    {# ── Revenue panel ── #}
+    <div class="kpi-tab-panel active" id="kpi-panel-{{ company_id }}-revenue">
+        {% if kpi_details.revenue.items %}
+        <table class="kpi-detail-table">
+            <thead>
+                <tr>
+                    <th>Client</th><th>BD Person</th><th>Value</th><th>Type</th><th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in kpi_details.revenue.items %}
+                <tr>
+                    <td>{{ item.client }}</td>
+                    <td>{{ item.bd }}</td>
+                    <td class="kpi-detail-value">{{ item.value }}</td>
+                    <td>{{ item.type }}</td>
+                    <td><span class="status-badge status-{{ item.status | lower | replace(' ', '-') }}">{{ item.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="kpi-empty-state">No revenue items recorded.</p>
+        {% endif %}
+    </div>
+
+    {# ── Invoiced panel ── #}
+    <div class="kpi-tab-panel" id="kpi-panel-{{ company_id }}-invoiced">
+        {% if kpi_details.invoiced.items %}
+        <table class="kpi-detail-table">
+            <thead>
+                <tr>
+                    <th>Client</th><th>Invoice Ref</th><th>Amount</th><th>Date</th><th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in kpi_details.invoiced.items %}
+                <tr>
+                    <td>{{ item.client }}</td>
+                    <td class="kpi-detail-ref">{{ item.ref }}</td>
+                    <td class="kpi-detail-value">{{ item.amount }}</td>
+                    <td>{{ item.date }}</td>
+                    <td><span class="status-badge status-{{ item.status | lower | replace(' ', '-') }}">{{ item.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="kpi-empty-state">No invoices recorded.</p>
+        {% endif %}
+    </div>
+
+    {# ── Payments panel: reuse aging_panel macro ── #}
+    <div class="kpi-tab-panel" id="kpi-panel-{{ company_id }}-payments">
+        {{ aging_panel(company_id, aging) }}
+    </div>
+
+    {# ── Meetings panel ── #}
+    <div class="kpi-tab-panel" id="kpi-panel-{{ company_id }}-meetings">
+        {% if kpi_details.meetings.items %}
+        <table class="kpi-detail-table">
+            <thead>
+                <tr>
+                    <th>Client</th><th>BD Person</th><th>Date</th><th>Type</th><th>Next Step</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in kpi_details.meetings.items %}
+                <tr>
+                    <td>{{ item.client }}</td>
+                    <td>{{ item.bd }}</td>
+                    <td class="kpi-detail-date">{{ item.date }}</td>
+                    <td>{{ item.type }}</td>
+                    <td class="kpi-detail-nextstep">{{ item.next_step }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="kpi-empty-state">No meetings recorded.</p>
+        {% endif %}
+    </div>
+
+    {# ── Proposals panel ── #}
+    <div class="kpi-tab-panel" id="kpi-panel-{{ company_id }}-proposals">
+        {% if kpi_details.proposals.items %}
+        <table class="kpi-detail-table">
+            <thead>
+                <tr>
+                    <th>Client</th><th>BD Person</th><th>Value</th><th>Submitted</th><th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in kpi_details.proposals.items %}
+                <tr>
+                    <td>{{ item.client }}</td>
+                    <td>{{ item.bd }}</td>
+                    <td class="kpi-detail-value">{{ item.value }}</td>
+                    <td class="kpi-detail-date">{{ item.submitted }}</td>
+                    <td><span class="status-badge status-{{ item.status | lower | replace(' ', '-') }}">{{ item.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="kpi-empty-state">No proposals recorded.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endmacro %}
