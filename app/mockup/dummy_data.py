@@ -130,3 +130,203 @@ DASHBOARD_DATA = {
         },
     ],
 }
+
+# Aging data: committed but not delivered, grouped by overdue bucket.
+# Indexed by company slug. "corporate" is the cross-company aggregate.
+AGING_DATA = {
+    "transactions": {
+        "7d":  {
+            "count": 3, "total": "Rs.2.1 Cr",
+            "items": [
+                {"company": "Fidelitus Trans", "member": "Rajesh Kumar",  "value": "Rs.80L",   "days": 6,   "reason": "Client travel delay, confirming by Mon"},
+                {"company": "Fidelitus Trans", "member": "Priya Menon",   "value": "Rs.75L",   "days": 7,   "reason": "Cheque in transit"},
+                {"company": "Fidelitus Trans", "member": "Anand Rao",     "value": "Rs.55L",   "days": 5,   "reason": "Bank processing delay"},
+            ],
+        },
+        "14d": {
+            "count": 2, "total": "Rs.1.4 Cr",
+            "items": [
+                {"company": "Fidelitus Trans", "member": "Suresh Nair",   "value": "Rs.90L",   "days": 13,  "reason": "NEFT rejected, re-initiated"},
+                {"company": "Fidelitus Trans", "member": "Kavitha Reddy", "value": "Rs.50L",   "days": 11,  "reason": "Awaiting MD approval from client"},
+            ],
+        },
+        "21d": {
+            "count": 1, "total": "Rs.0.6 Cr",
+            "items": [
+                {"company": "Fidelitus Trans", "member": "Vikram Singh",  "value": "Rs.60L",   "days": 19,  "reason": "Legal vetting on agreement"},
+            ],
+        },
+        "90d": {
+            "count": 1, "total": "Rs.1.2 Cr",
+            "items": [
+                {"company": "Fidelitus Trans", "member": "Mohan Das",     "value": "Rs.1.2 Cr","days": 67,  "reason": "Client undergoing internal restructuring"},
+            ],
+        },
+        "npa":  {
+            "count": 1, "total": "Rs.0.9 Cr",
+            "items": [
+                {"company": "Fidelitus Trans", "member": "Renu Sharma",   "value": "Rs.90L",   "days": 112, "reason": "Dispute raised, legal notice sent"},
+            ],
+        },
+    },
+    "projects": {
+        "7d":  {
+            "count": 2, "total": "Rs.1.5 Cr",
+            "items": [
+                {"company": "Fidelitus Projects", "member": "Arjun Shetty",  "value": "Rs.85L",   "days": 5,  "reason": "Client site inspection pending"},
+                {"company": "Fidelitus Projects", "member": "Deepa Thomas",  "value": "Rs.65L",   "days": 7,  "reason": "Contractor invoice mismatch"},
+            ],
+        },
+        "14d": {
+            "count": 2, "total": "Rs.1.1 Cr",
+            "items": [
+                {"company": "Fidelitus Projects", "member": "Kiran Joshi",   "value": "Rs.70L",   "days": 12, "reason": "Completion certificate delayed"},
+                {"company": "Fidelitus Projects", "member": "Meera Pillai",  "value": "Rs.40L",   "days": 10, "reason": "Client on international travel"},
+            ],
+        },
+        "21d": {
+            "count": 1, "total": "Rs.0.8 Cr",
+            "items": [
+                {"company": "Fidelitus Projects", "member": "Rahul Verma",   "value": "Rs.80L",   "days": 18, "reason": "Scope change documentation pending"},
+            ],
+        },
+        "90d": {
+            "count": 1, "total": "Rs.0.5 Cr",
+            "items": [
+                {"company": "Fidelitus Projects", "member": "Sunita Bose",   "value": "Rs.50L",   "days": 55, "reason": "Dispute over punch-list items"},
+            ],
+        },
+        "npa":  {
+            "count": 0, "total": "Rs.0",
+            "items": [],
+        },
+    },
+    "fms": {
+        "7d":  {
+            "count": 2, "total": "Rs.0.9 Cr",
+            "items": [
+                {"company": "Fidelitus FMS", "member": "Anil Kapoor",    "value": "Rs.55L",   "days": 6,  "reason": "Facility audit report awaited"},
+                {"company": "Fidelitus FMS", "member": "Sneha Iyer",     "value": "Rs.35L",   "days": 4,  "reason": "Monthly invoice approval pending"},
+            ],
+        },
+        "14d": {
+            "count": 1, "total": "Rs.0.6 Cr",
+            "items": [
+                {"company": "Fidelitus FMS", "member": "Ramesh Gupta",   "value": "Rs.60L",   "days": 11, "reason": "Security deposit adjustment"},
+            ],
+        },
+        "21d": {
+            "count": 1, "total": "Rs.0.4 Cr",
+            "items": [
+                {"company": "Fidelitus FMS", "member": "Lata Srinivas",  "value": "Rs.40L",   "days": 20, "reason": "AMC renewal dispute"},
+            ],
+        },
+        "90d": {
+            "count": 0, "total": "Rs.0",
+            "items": [],
+        },
+        "npa":  {
+            "count": 1, "total": "Rs.0.3 Cr",
+            "items": [
+                {"company": "Fidelitus FMS", "member": "Gopal Nair",     "value": "Rs.30L",   "days": 98, "reason": "Client entity dissolved, legal action initiated"},
+            ],
+        },
+    },
+    "hrlabs": {
+        "7d":  {
+            "count": 1, "total": "Rs.0.4 Cr",
+            "items": [
+                {"company": "Fidelitus HR Labs", "member": "Preethi Nair",   "value": "Rs.40L",   "days": 5,  "reason": "Hiring milestone not yet confirmed"},
+            ],
+        },
+        "14d": {
+            "count": 2, "total": "Rs.0.7 Cr",
+            "items": [
+                {"company": "Fidelitus HR Labs", "member": "Santosh Kumar",  "value": "Rs.45L",   "days": 14, "reason": "Background check delay by client"},
+                {"company": "Fidelitus HR Labs", "member": "Divya Menon",    "value": "Rs.25L",   "days": 10, "reason": "PO amendment in process"},
+            ],
+        },
+        "21d": {
+            "count": 1, "total": "Rs.0.3 Cr",
+            "items": [
+                {"company": "Fidelitus HR Labs", "member": "Naresh Patel",   "value": "Rs.30L",   "days": 21, "reason": "Joining date pushed, payment tied to onboarding"},
+            ],
+        },
+        "90d": {
+            "count": 1, "total": "Rs.0.5 Cr",
+            "items": [
+                {"company": "Fidelitus HR Labs", "member": "Shobha Rao",     "value": "Rs.50L",   "days": 72, "reason": "Candidate resigned, replacement clause invoked"},
+            ],
+        },
+        "npa":  {
+            "count": 0, "total": "Rs.0",
+            "items": [],
+        },
+    },
+    "technology": {
+        "7d":  {
+            "count": 1, "total": "Rs.0.3 Cr",
+            "items": [
+                {"company": "Fidelitus Technology", "member": "Vikash Mehta",   "value": "Rs.30L",   "days": 7,  "reason": "UAT sign-off pending from client"},
+            ],
+        },
+        "14d": {
+            "count": 1, "total": "Rs.0.2 Cr",
+            "items": [
+                {"company": "Fidelitus Technology", "member": "Rohini Das",     "value": "Rs.20L",   "days": 13, "reason": "Go-live delayed by client infra team"},
+            ],
+        },
+        "21d": {
+            "count": 0, "total": "Rs.0",
+            "items": [],
+        },
+        "90d": {
+            "count": 1, "total": "Rs.0.4 Cr",
+            "items": [
+                {"company": "Fidelitus Technology", "member": "Sudhir Bhat",    "value": "Rs.40L",   "days": 60, "reason": "Change request scope dispute"},
+            ],
+        },
+        "npa":  {
+            "count": 0, "total": "Rs.0",
+            "items": [],
+        },
+    },
+    "gcc": {
+        "7d":  {
+            "count": 1, "total": "Rs.0.5 Cr",
+            "items": [
+                {"company": "Fidelitus GCC Nexus", "member": "Aditya Sharma",  "value": "Rs.50L",   "days": 6,  "reason": "LOI issued, payment terms being finalised"},
+            ],
+        },
+        "14d": {
+            "count": 0, "total": "Rs.0",
+            "items": [],
+        },
+        "21d": {
+            "count": 0, "total": "Rs.0",
+            "items": [],
+        },
+        "90d": {
+            "count": 0, "total": "Rs.0",
+            "items": [],
+        },
+        "npa":  {
+            "count": 0, "total": "Rs.0",
+            "items": [],
+        },
+    },
+}
+
+# Corporate aggregate: flatten all company items per bucket
+def _build_corporate_aging():
+    buckets = ["7d", "14d", "21d", "90d", "npa"]
+    result = {}
+    for bucket in buckets:
+        items = []
+        for slug_data in AGING_DATA.values():
+            items.extend(slug_data[bucket]["items"])
+        count = sum(len(slug_data[bucket]["items"]) for slug_data in AGING_DATA.values())
+        result[bucket] = {"count": count, "items": items, "total": f"Rs. {count} items (see below)"}
+    return result
+
+AGING_DATA["corporate"] = _build_corporate_aging()
