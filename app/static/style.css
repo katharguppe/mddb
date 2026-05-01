@@ -556,3 +556,136 @@ p {
     background: rgba(232, 168, 56, 0.04);
     transition: border-color 0.15s, background 0.15s;
 }
+
+/* ── Corporate Leads Pipeline (Section C) ── */
+.pipeline-flow {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0;
+}
+
+.pipeline-stage-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1rem;
+    background: #1c2330;
+    border: 1px solid var(--color-border);
+    border-left: none;
+    position: relative;
+}
+
+.pipeline-stage-card:first-child {
+    border-left: 1px solid var(--color-border);
+    border-radius: 6px 0 0 6px;
+}
+
+.pipeline-stage-card:last-child {
+    border-radius: 0 6px 6px 0;
+}
+
+/* Connector arrow between stages */
+.pipeline-stage-card:not(:last-child)::after {
+    content: '›';
+    position: absolute;
+    right: -0.55rem;
+    top: 1rem;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    line-height: 1;
+    z-index: 2;
+}
+
+.pipeline-stage-name {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--color-text-secondary);
+}
+
+.pipeline-count {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    line-height: 1;
+}
+
+.pipeline-target {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: var(--color-text-secondary);
+}
+
+.pipeline-value {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    min-height: 1.1rem;
+}
+
+.pipeline-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+}
+
+.pipeline-delta-text {
+    font-size: 0.68rem;
+    color: var(--color-text-secondary);
+}
+
+.pipeline-details-link {
+    display: inline-block;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    font-size: 0.72rem;
+    color: var(--color-accent);
+    cursor: pointer;
+    text-decoration: none;
+    border-top: 1px solid var(--color-border);
+    transition: opacity 0.15s;
+    background: transparent;
+    border-right: none;
+    border-bottom: none;
+    border-left: none;
+    font-family: var(--font-body);
+}
+
+.pipeline-details-link:hover {
+    opacity: 0.7;
+}
+
+/* Pipeline aging panel (full-width slide-down below the flow) */
+.pipeline-aging-panel {
+    margin-top: 0.5rem;
+}
+
+.pipeline-aging-panel.open {
+    max-height: 1000px !important;
+    border-top: 1px solid var(--color-border);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .pipeline-flow {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pipeline-stage-card {
+        border-left: 1px solid var(--color-border);
+        border-radius: 6px;
+    }
+
+    .pipeline-stage-card:not(:last-child)::after {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .pipeline-flow {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
