@@ -325,10 +325,6 @@ p {
     flex: 1;
 }
 
-.ckpi-target-placeholder {
-    display: inline-block;
-    width: 3rem;
-}
 
 /* ── Know More button ── */
 .company-card-footer {
@@ -364,7 +360,7 @@ p {
 }
 
 .company-details.open {
-    max-height: 120px;
+    max-height: 1200px;
     border-top: 1px solid var(--color-border);
 }
 
@@ -531,10 +527,6 @@ p {
     max-width: 16rem;
 }
 
-/* Fix: deep panels need more max-height */
-.company-details.open {
-    max-height: 800px !important;
-}
 
 /* Corporate aging panel (sits below KPI strip) */
 .corporate-aging-panel {
@@ -690,4 +682,162 @@ p {
     .pipeline-flow {
         grid-template-columns: repeat(2, 1fr);
     }
+}
+
+/* ── KPI Tab Strip ── */
+.kpi-tabs-container {
+    padding: 0 0 0.5rem;
+}
+
+.kpi-tab-strip {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.5rem 1rem 0;
+    border-bottom: 1px solid var(--color-border);
+    overflow-x: auto;
+}
+
+.kpi-tab {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 0.4rem 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    white-space: nowrap;
+    margin-bottom: -1px;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.kpi-tab:hover {
+    color: var(--color-text-primary);
+}
+
+.kpi-tab.active {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+}
+
+/* ── KPI Tab Content Panels ── */
+.kpi-tab-panel {
+    display: none;
+    padding: 0.75rem 1rem;
+    overflow-x: auto;
+}
+
+.kpi-tab-panel.active {
+    display: block;
+}
+
+/* ── KPI Detail Table (Revenue / Invoiced / Meetings / Proposals) ── */
+.kpi-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+}
+
+.kpi-detail-table th {
+    text-align: left;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-secondary);
+    padding: 0.3rem 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+}
+
+.kpi-detail-table td {
+    padding: 0.35rem 0.5rem;
+    color: var(--color-text-primary);
+    border-bottom: 1px solid rgba(48, 54, 61, 0.4);
+    vertical-align: top;
+}
+
+.kpi-detail-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.kpi-detail-value {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--color-accent);
+    white-space: nowrap;
+}
+
+.kpi-detail-ref {
+    font-size: 0.68rem;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+}
+
+.kpi-detail-date {
+    white-space: nowrap;
+    color: var(--color-text-secondary);
+}
+
+.kpi-detail-nextstep {
+    color: var(--color-text-secondary);
+    font-style: italic;
+    max-width: 14rem;
+}
+
+/* ── Status Badges ── */
+.status-badge {
+    display: inline-block;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Green: closed / paid / accepted */
+.status-closed,
+.status-paid,
+.status-accepted {
+    background: rgba(34, 197, 94, 0.12);
+    color: #22c55e;
+}
+
+/* Amber: committed / pending / shortlisted / under-review */
+.status-committed,
+.status-pending,
+.status-shortlisted,
+.status-under-review {
+    background: rgba(232, 168, 56, 0.12);
+    color: var(--color-accent);
+}
+
+/* Muted: submitted / sent / in-pipeline */
+.status-submitted,
+.status-sent,
+.status-in-pipeline {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-secondary);
+}
+
+/* Red: overdue / declined */
+.status-overdue,
+.status-declined {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+}
+
+/* Empty state */
+.kpi-empty-state {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    font-style: italic;
+    padding: 0.5rem 0;
+}
+
+/* Separator between KPI detail table and aging panel within a tab */
+.kpi-aging-separator {
+    height: 1px;
+    background: var(--color-border);
+    margin: 0.75rem 0 0;
 }
