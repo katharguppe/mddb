@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "partials/aging_panel.html" import aging_panel %}
 
 {% block title %}MD Dashboard . Fidelitus Corp{% endblock %}
 
@@ -28,7 +29,9 @@
         <div class="section-label">Corporate KPIs</div>
         <div class="kpi-strip">
             {% for kpi in data.corporate.kpis %}
-            <div class="kpi-card">
+            <div class="kpi-card kpi-card--clickable"
+                 onclick="toggleCorporateAging()"
+                 title="Click to view aging drill-down">
                 <div class="kpi-label">{{ kpi.label }}</div>
                 <div class="kpi-value">{{ kpi.value }}</div>
                 {% if kpi.target %}
@@ -44,6 +47,11 @@
                 {% endif %}
             </div>
             {% endfor %}
+        </div>
+
+        {# ── Corporate aging panel (hidden until a KPI card is clicked) ── #}
+        <div class="company-details corporate-aging-panel" id="details-corporate">
+            {{ aging_panel("corporate", aging["corporate"]) }}
         </div>
     </section>
 
@@ -85,9 +93,12 @@
                             onclick="toggleDetails('{{ company.id }}')">Know More →</button>
                 </div>
 
-                {# Slide-down details panel (hidden until toggled) #}
+                {# Slide-down details panel with aging drill-down #}
                 <div class="company-details" id="details-{{ company.id }}">
-                    <p class="details-placeholder">Target: {{ company.kpis[0].value }}&nbsp;&nbsp;·&nbsp;&nbsp;Aging analysis — Session 04</p>
+                    <div class="know-more-target-row">
+                        Annual Target: {{ company.kpis[0].value }}
+                    </div>
+                    {{ aging_panel(company.id, aging[company.id]) }}
                 </div>
 
             </div>
