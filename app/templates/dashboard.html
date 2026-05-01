@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% from "partials/aging_panel.html" import aging_panel %}
+{% from "partials/kpi_tabs_panel.html" import kpi_tabs_panel %}
 
 {% block title %}MD Dashboard . Fidelitus Corp{% endblock %}
 
@@ -29,9 +30,13 @@
         <div class="section-label">Corporate KPIs</div>
         <div class="kpi-strip">
             {% for kpi in data.corporate.kpis %}
+            {% if loop.first %}
+            <div class="kpi-card">
+            {% else %}
             <div class="kpi-card kpi-card--clickable"
                  onclick="toggleCorporateAging()"
                  title="Click to view aging drill-down">
+            {% endif %}
                 <div class="kpi-label">{{ kpi.label }}</div>
                 <div class="kpi-value">{{ kpi.value }}</div>
                 {% if kpi.target %}
@@ -95,10 +100,7 @@
 
                 {# Slide-down details panel with aging drill-down #}
                 <div class="company-details" id="details-{{ company.id }}">
-                    <div class="know-more-target-row">
-                        Annual Target: {{ company.kpis[0].value }}
-                    </div>
-                    {{ aging_panel(company.id, aging[company.id]) }}
+                    {{ kpi_tabs_panel(company.id, kpi_details[company.id], aging[company.id]) }}
                 </div>
 
             </div>
