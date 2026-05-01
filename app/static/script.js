@@ -1,17 +1,48 @@
 /* ── Company card Know More toggle ── */
 function toggleDetails(id) {
     const panel = document.getElementById('details-' + id);
+    if (!panel) return;
+    const isOpen = panel.classList.contains('open');
     panel.classList.toggle('open');
 
-    // Reset any open aging tables when collapsing the card
-    if (!panel.classList.contains('open')) {
+    // Update button text
+    const btn = document.querySelector('.company-card .btn-know-more[onclick*="' + id + '"]');
+    if (btn) btn.textContent = isOpen ? 'Know More \u2192' : 'Close \u2191';
+
+    if (!isOpen) {
+        // Opening: default to Revenue tab
+        switchKpiTab(id, 'revenue');
+    } else {
+        // Closing: reset aging pills in case Payments tab was active
         resetAgingPills(id);
     }
+}
+
+/* ── KPI tab switching ── */
+function switchKpiTab(companyId, tabKey) {
+    const container = document.getElementById('kpi-tabs-' + companyId);
+    if (!container) return;
+
+    // Deactivate all tabs and hide all panels
+    container.querySelectorAll('.kpi-tab').forEach(function(tab) {
+        tab.classList.remove('active');
+    });
+    container.querySelectorAll('.kpi-tab-panel').forEach(function(p) {
+        p.classList.remove('active');
+    });
+
+    // Activate the selected tab and panel
+    const activeTab = container.querySelector('[data-tab="' + tabKey + '"]');
+    if (activeTab) activeTab.classList.add('active');
+
+    const activePanel = document.getElementById('kpi-panel-' + companyId + '-' + tabKey);
+    if (activePanel) activePanel.classList.add('active');
 }
 
 /* ── Corporate aging panel toggle (called by any KPI strip card click) ── */
 function toggleCorporateAging() {
     const panel = document.getElementById('details-corporate');
+    if (!panel) return;
     panel.classList.toggle('open');
 
     if (!panel.classList.contains('open')) {
