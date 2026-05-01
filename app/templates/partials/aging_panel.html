@@ -1,0 +1,66 @@
+{# app/templates/partials/aging_panel.html
+   Macro: aging_panel(company_id, aging)
+   aging = AGING_DATA[company_id]  -- dict with keys 7d / 14d / 21d / 90d / npa
+#}
+
+{% macro aging_panel(company_id, aging) %}
+<div class="aging-panel">
+
+    {# ── Bucket pills row ── #}
+    <div class="aging-pills" id="aging-pills-{{ company_id }}">
+        {% set buckets = [
+            ("7d",  "7 Days"),
+            ("14d", "14 Days"),
+            ("21d", "21 Days"),
+            ("90d", "90 Days"),
+            ("npa", "NPA"),
+        ] %}
+        {% for key, label in buckets %}
+        {% set bucket = aging[key] %}
+        <button
+            class="aging-pill {% if bucket.count == 0 %}aging-pill--empty{% endif %}"
+            data-company="{{ company_id }}"
+            data-bucket="{{ key }}"
+            onclick="toggleAgingBucket('{{ company_id }}', '{{ key }}')"
+            {% if bucket.count == 0 %}disabled{% endif %}
+        >
+            <span class="aging-pill-label">{{ label }}</span>
+            <span class="aging-pill-count">{{ bucket.count }}</span>
+            <span class="aging-pill-total">{{ bucket.total }}</span>
+        </button>
+        {% endfor %}
+    </div>
+
+    {# ── Per-bucket detail tables (hidden until pill clicked) ── #}
+    {% for key, label in [("7d","7 Days"),("14d","14 Days"),("21d","21 Days"),("90d","90 Days"),("npa","NPA")] %}
+    {% set bucket = aging[key] %}
+    {% if bucket.count > 0 %}
+    <div class="aging-table-wrapper" id="aging-table-{{ company_id }}-{{ key }}">
+        <table class="aging-table">
+            <thead>
+                <tr>
+                    <th>Company / Team</th>
+                    <th>Team Member</th>
+                    <th>Value (Rs.)</th>
+                    <th>Days Overdue</th>
+                    <th>Reason Entered</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in bucket['items'] %}
+                <tr>
+                    <td>{{ item.company }}</td>
+                    <td>{{ item.member }}</td>
+                    <td class="aging-value">{{ item.value }}</td>
+                    <td class="aging-days">{{ item.days }}d</td>
+                    <td class="aging-reason">{{ item.reason }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+</div>
+{% endmacro %}
