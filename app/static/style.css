@@ -834,3 +834,10 @@ p {
     font-style: italic;
     padding: 0.5rem 0;
 }
+
+/* Separator between KPI detail table and aging panel within a tab */
+.kpi-aging-separator {
+    height: 1px;
+    background: var(--color-border);
+    margin: 0.75rem 0 0;
+}
