@@ -106,6 +106,38 @@
         </div>
     </section>
 
+    {# ── Section C: Corporate Leads Pipeline ── #}
+    <section class="section">
+        <div class="section-label">Corporate Leads Pipeline — WTD Apr 25, 2026</div>
+        <div class="pipeline-flow">
+            {% for stage in data.pipeline %}
+            <div class="pipeline-stage-card">
+                <div class="pipeline-stage-name">{{ stage.stage }}</div>
+                <div class="pipeline-count">
+                    {{ stage.count }}<span class="pipeline-target"> / {{ stage.target }}</span>
+                </div>
+                <div class="pipeline-value">{{ stage.value if stage.value else "—" }}</div>
+                <div class="pipeline-footer">
+                    <span class="pct-badge {{ pct_class(stage.pct) }}">{{ stage.pct }}%</span>
+                    {% if stage.delta_dir == "up" %}<span class="delta-up">▲</span>
+                    {% elif stage.delta_dir == "down" %}<span class="delta-down">▼</span>
+                    {% endif %}
+                    <span class="pipeline-delta-text">{{ stage.delta_val }}</span>
+                </div>
+                <a class="pipeline-details-link"
+                   onclick="toggleDetails('{{ stage.id }}')">Details →</a>
+            </div>
+            {% endfor %}
+        </div>
+
+        {# Per-stage aging panels — hidden until Details clicked #}
+        {% for stage in data.pipeline %}
+        <div class="company-details pipeline-aging-panel" id="details-{{ stage.id }}">
+            {{ aging_panel(stage.id, aging[stage.id]) }}
+        </div>
+        {% endfor %}
+    </section>
+
 </main>
 {% endblock %}
 
