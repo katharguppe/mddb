@@ -395,6 +395,14 @@ PRODUCTION=1 (dummy data).
 
 GOAL -- Final mockup review, polish, and developer handoff preparation.
 
+== CARRY-OVER FROM s06 (do this FIRST, before any polish work) ==
+Weekly Pulse panel (Section W) currently shows Revenue only.
+Expand it to ALL 6 KPIs: Revenue . Invoiced . Payments . Meetings . Proposals . Target.
+Same committed-vs-actual-vs-delta structure per KPI per company.
+Add a KPI selector row above the pulse table (pill tabs, vanilla JS).
+Dummy data for all KPIs already exists in WEEKLY_PULSE -- extend it.
+Prerequisite: merge PR#6 (feature/TASK-006-weekly-pulse) before starting s07.
+
 TASKS IN THIS SESSION:
 
 1. FULL REVIEW
