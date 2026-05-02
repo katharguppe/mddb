@@ -23,12 +23,13 @@ if settings.PRODUCTION == "1":
     from app.mockup import routes as mockup_routes
     app.include_router(mockup_routes.router)
 else:
-    # Phase 1: Serve live API routes (not implemented yet)
-    # from app.api import leads, finance, targets, companies, aging
-    # app.include_router(leads.router, prefix="/api/leads")
-    # ... etc
-    pass
+    # Phase 1: stub — returns JSON until real routes are built in s09-s14
+    from app.api import routes as api_routes
+    app.include_router(api_routes.router)
 
+# NOTE: /health is registered directly on app (not via a router), so it takes
+# precedence over the /{path:path} catch-all registered by the stub router in
+# PRODUCTION=0 mode. The health check is reachable regardless of PRODUCTION setting.
 @app.get("/health")
 async def health_check():
     """Health check endpoint."""

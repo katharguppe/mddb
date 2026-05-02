@@ -8,7 +8,7 @@
 {# Macro: map percentage to CSS color-band class #}
 {% macro pct_class(pct) -%}
   {%- if pct is none -%}
-  {%- elif pct <= 25 -%}kpi-status-red
+  {%- elif pct < 25 -%}kpi-status-red
   {%- elif pct <= 50 -%}kpi-status-red-orange
   {%- elif pct <= 75 -%}kpi-status-amber
   {%- else -%}kpi-status-green
@@ -22,6 +22,7 @@
     </div>
     <div class="header-right">
         <span class="phase-badge">Phase 0 Mockup</span>
+        <button class="btn-print" onclick="printDashboard()">Print</button>
         <div class="time-filter" id="time-filter">
             <button class="tf-pill active" onclick="setTimePeriod('WTD')">WTD</button>
             <button class="tf-pill"        onclick="setTimePeriod('MTD')">MTD</button>
@@ -77,6 +78,17 @@
             </span>
         </div>
 
+        {# KPI selector pills #}
+        <div class="pulse-kpi-selector" id="pulse-kpi-selector">
+            <button class="pulse-kpi-pill active" data-kpi="revenue" onclick="switchPulseKpi('revenue')">Revenue</button>
+            <button class="pulse-kpi-pill" data-kpi="invoiced" onclick="switchPulseKpi('invoiced')">Invoiced</button>
+            <button class="pulse-kpi-pill" data-kpi="payments" onclick="switchPulseKpi('payments')">Payments</button>
+            <button class="pulse-kpi-pill" data-kpi="meetings" onclick="switchPulseKpi('meetings')">Meetings</button>
+            <button class="pulse-kpi-pill" data-kpi="proposals" onclick="switchPulseKpi('proposals')">Proposals</button>
+            <button class="pulse-kpi-pill" data-kpi="target" onclick="switchPulseKpi('target')">Target</button>
+        </div>
+
+        {% set kpi_keys = ['revenue','invoiced','payments','meetings','proposals','target'] %}
         <table class="pulse-table">
             <thead>
                 <tr>
@@ -92,16 +104,47 @@
                 <tr class="pulse-row pulse-row--clickable"
                     onclick="toggleDetails('{{ row.id }}')">
                     <td>{{ row.name }}</td>
-                    <td>{{ row.committed }}</td>
-                    <td>{{ row.actual }}</td>
-                    <td class="pulse-delta pulse-delta--{{ row.delta_sign }}">
-                        {% if row.delta_sign == 'pos' %}▲{% else %}▼{% endif %}
-                        {{ row.delta }}
+                    <td>
+                        {% for k in kpi_keys %}
+                        <span class="pulse-kpi-val" data-kpi="{{ k }}"
+                              {% if k != 'revenue' %}style="display:none"{% endif %}>
+                            {{ row.kpis[k].committed }}
+                        </span>
+                        {% endfor %}
                     </td>
                     <td>
-                        <span class="pct-badge {{ pct_class(row.actual_pct) }}">
-                            {{ row.actual_pct }}%
+                        {% for k in kpi_keys %}
+                        <span class="pulse-kpi-val" data-kpi="{{ k }}"
+                              {% if k != 'revenue' %}style="display:none"{% endif %}>
+                            {{ row.kpis[k].actual }}
                         </span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for k in kpi_keys %}
+                        <span class="pulse-kpi-val pulse-delta pulse-delta--{{ row.kpis[k].delta_sign }}"
+                              data-kpi="{{ k }}"
+                              {% if k != 'revenue' %}style="display:none"{% endif %}>
+                            {% if row.kpis[k].delta_sign == 'pos' %}▲
+                            {% elif row.kpis[k].delta_sign == 'neg' %}▼
+                            {% endif %}
+                            {{ row.kpis[k].delta }}
+                        </span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for k in kpi_keys %}
+                        <span class="pulse-kpi-val" data-kpi="{{ k }}"
+                              {% if k != 'revenue' %}style="display:none"{% endif %}>
+                            {% if row.kpis[k].actual_pct is not none %}
+                            <span class="pct-badge {{ pct_class(row.kpis[k].actual_pct) }}">
+                                {{ row.kpis[k].actual_pct }}%
+                            </span>
+                            {% else %}
+                            <span class="pulse-kpi-val-dash">—</span>
+                            {% endif %}
+                        </span>
+                        {% endfor %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -109,16 +152,47 @@
             <tfoot>
                 <tr class="pulse-total-row">
                     <td>CORPORATE TOTAL</td>
-                    <td>{{ weekly_pulse.total.committed }}</td>
-                    <td>{{ weekly_pulse.total.actual }}</td>
-                    <td class="pulse-delta pulse-delta--{{ weekly_pulse.total.delta_sign }}">
-                        {% if weekly_pulse.total.delta_sign == 'pos' %}▲{% else %}▼{% endif %}
-                        {{ weekly_pulse.total.delta }}
+                    <td>
+                        {% for k in kpi_keys %}
+                        <span class="pulse-kpi-val" data-kpi="{{ k }}"
+                              {% if k != 'revenue' %}style="display:none"{% endif %}>
+                            {{ weekly_pulse.total.kpis[k].committed }}
+                        </span>
+                        {% endfor %}
                     </td>
                     <td>
-                        <span class="pct-badge {{ pct_class(weekly_pulse.total.actual_pct) }}">
-                            {{ weekly_pulse.total.actual_pct }}%
+                        {% for k in kpi_keys %}
+                        <span class="pulse-kpi-val" data-kpi="{{ k }}"
+                              {% if k != 'revenue' %}style="display:none"{% endif %}>
+                            {{ weekly_pulse.total.kpis[k].actual }}
                         </span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for k in kpi_keys %}
+                        <span class="pulse-kpi-val pulse-delta pulse-delta--{{ weekly_pulse.total.kpis[k].delta_sign }}"
+                              data-kpi="{{ k }}"
+                              {% if k != 'revenue' %}style="display:none"{% endif %}>
+                            {% if weekly_pulse.total.kpis[k].delta_sign == 'pos' %}▲
+                            {% elif weekly_pulse.total.kpis[k].delta_sign == 'neg' %}▼
+                            {% endif %}
+                            {{ weekly_pulse.total.kpis[k].delta }}
+                        </span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for k in kpi_keys %}
+                        <span class="pulse-kpi-val" data-kpi="{{ k }}"
+                              {% if k != 'revenue' %}style="display:none"{% endif %}>
+                            {% if weekly_pulse.total.kpis[k].actual_pct is not none %}
+                            <span class="pct-badge {{ pct_class(weekly_pulse.total.kpis[k].actual_pct) }}">
+                                {{ weekly_pulse.total.kpis[k].actual_pct }}%
+                            </span>
+                            {% else %}
+                            <span class="pulse-kpi-val-dash">—</span>
+                            {% endif %}
+                        </span>
+                        {% endfor %}
                     </td>
                 </tr>
             </tfoot>
@@ -135,7 +209,10 @@
                 {# Card header: dot + name #}
                 <div class="company-card-header">
                     <span class="company-dot" style="background: {{ company.dot_color }}"></span>
-                    <span class="company-name">{{ company.name }}</span>
+                    <div class="company-name-block">
+                        <span class="company-name">{{ company.name }}</span>
+                        <span class="card-last-updated">Updated: {{ company.last_updated }}</span>
+                    </div>
                 </div>
 
                 {# KPI rows — skip Target row (shown in Know More panel) #}
@@ -207,6 +284,22 @@
     </section>
 
 </main>
+
+{# ── Sticky Notes widget ── #}
+<div id="sticky-notes" class="sticky-notes sticky-notes--collapsed">
+    <button class="sticky-notes-toggle" id="sticky-notes-toggle"
+            onclick="toggleStickyNotes()" title="MD Notes">&#128221;</button>
+    <div class="sticky-notes-panel" id="sticky-notes-panel">
+        <div class="sticky-notes-header">MD Notes</div>
+        <textarea id="sticky-notes-ta" rows="6"
+                  placeholder="Quick reminders..."
+                  oninput="updateStickyCharCount()"></textarea>
+        <div class="sticky-notes-footer">
+            <span id="sticky-notes-charcount">0 chars</span>
+            <button onclick="saveStickyNotes()">Save</button>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}

@@ -26,14 +26,17 @@ def test_all_six_companies_rendered():
 
 def test_six_know_more_buttons_rendered():
     html = client.get("/").text
-    assert html.count("toggleDetails") == 6, f"Expected 6 toggleDetails calls, found {html.count('toggleDetails')}"
+    # 6 company cards have "Know More" buttons; pipeline stages and pulse rows
+    # also call toggleDetails, so count btn-know-more specifically
+    assert html.count("btn-know-more") == 6, f"Expected 6 btn-know-more buttons, found {html.count('btn-know-more')}"
 
 
 def test_details_panels_rendered():
     html = client.get("/").text
     for company_id in ["transactions", "projects", "fms", "hrlabs", "technology", "gcc"]:
         assert f'id="details-{company_id}"' in html, f"Details panel for '{company_id}' not found"
-    assert "Aging analysis" in html, "Aging analysis placeholder text not found"
+    # Aging panels are rendered with pill controls (the old "Aging analysis" placeholder is gone)
+    assert "aging-pills" in html, "Aging pill controls not found in rendered HTML"
 
 
 def test_pct_color_bands_rendered():
