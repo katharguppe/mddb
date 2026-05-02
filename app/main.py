@@ -27,6 +27,9 @@ else:
     from app.api import routes as api_routes
     app.include_router(api_routes.router)
 
+# NOTE: /health is registered directly on app (not via a router), so it takes
+# precedence over the /{path:path} catch-all registered by the stub router in
+# PRODUCTION=0 mode. The health check is reachable regardless of PRODUCTION setting.
 @app.get("/health")
 async def health_check():
     """Health check endpoint."""

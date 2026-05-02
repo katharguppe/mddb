@@ -80,14 +80,15 @@
 
         {# KPI selector pills #}
         <div class="pulse-kpi-selector" id="pulse-kpi-selector">
-            <button class="pulse-kpi-pill active" onclick="switchPulseKpi('revenue')">Revenue</button>
-            <button class="pulse-kpi-pill" onclick="switchPulseKpi('invoiced')">Invoiced</button>
-            <button class="pulse-kpi-pill" onclick="switchPulseKpi('payments')">Payments</button>
-            <button class="pulse-kpi-pill" onclick="switchPulseKpi('meetings')">Meetings</button>
-            <button class="pulse-kpi-pill" onclick="switchPulseKpi('proposals')">Proposals</button>
-            <button class="pulse-kpi-pill" onclick="switchPulseKpi('target')">Target</button>
+            <button class="pulse-kpi-pill active" data-kpi="revenue" onclick="switchPulseKpi('revenue')">Revenue</button>
+            <button class="pulse-kpi-pill" data-kpi="invoiced" onclick="switchPulseKpi('invoiced')">Invoiced</button>
+            <button class="pulse-kpi-pill" data-kpi="payments" onclick="switchPulseKpi('payments')">Payments</button>
+            <button class="pulse-kpi-pill" data-kpi="meetings" onclick="switchPulseKpi('meetings')">Meetings</button>
+            <button class="pulse-kpi-pill" data-kpi="proposals" onclick="switchPulseKpi('proposals')">Proposals</button>
+            <button class="pulse-kpi-pill" data-kpi="target" onclick="switchPulseKpi('target')">Target</button>
         </div>
 
+        {% set kpi_keys = ['revenue','invoiced','payments','meetings','proposals','target'] %}
         <table class="pulse-table">
             <thead>
                 <tr>
@@ -99,7 +100,6 @@
                 </tr>
             </thead>
             <tbody>
-                {% set kpi_keys = ['revenue','invoiced','payments','meetings','proposals','target'] %}
                 {% for row in weekly_pulse.rows %}
                 <tr class="pulse-row pulse-row--clickable"
                     onclick="toggleDetails('{{ row.id }}')">

@@ -108,7 +108,7 @@ function setTimePeriod(period) {
 function switchPulseKpi(kpi) {
     // Update active pill
     document.querySelectorAll('.pulse-kpi-pill').forEach(function(pill) {
-        pill.classList.toggle('active', pill.textContent.trim().toLowerCase() === kpi);
+        pill.classList.toggle('active', pill.dataset.kpi === kpi);
     });
     // Show spans for selected KPI, hide others
     document.querySelectorAll('.pulse-kpi-val').forEach(function(span) {
@@ -158,8 +158,8 @@ function printDashboard() {
     window.print();
 }
 
-window.onafterprint = function() {
+window.addEventListener('afterprint', function() {
     document.querySelectorAll('.company-details').forEach(function(p) {
         p.classList.remove('open');
     });
-};
+});
