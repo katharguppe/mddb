@@ -8,7 +8,7 @@
 {# Macro: map percentage to CSS color-band class #}
 {% macro pct_class(pct) -%}
   {%- if pct is none -%}
-  {%- elif pct <= 25 -%}kpi-status-red
+  {%- elif pct < 25 -%}kpi-status-red
   {%- elif pct <= 50 -%}kpi-status-red-orange
   {%- elif pct <= 75 -%}kpi-status-amber
   {%- else -%}kpi-status-green
