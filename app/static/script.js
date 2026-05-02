@@ -103,3 +103,63 @@ function setTimePeriod(period) {
         pulse.classList.toggle('hidden', period !== 'WTD');
     }
 }
+
+/* ── Weekly Pulse KPI selector ── */
+function switchPulseKpi(kpi) {
+    // Update active pill
+    document.querySelectorAll('.pulse-kpi-pill').forEach(function(pill) {
+        pill.classList.toggle('active', pill.textContent.trim().toLowerCase() === kpi);
+    });
+    // Show spans for selected KPI, hide others
+    document.querySelectorAll('.pulse-kpi-val').forEach(function(span) {
+        span.style.display = span.dataset.kpi === kpi ? '' : 'none';
+    });
+}
+
+/* ── Sticky Notes widget ── */
+(function initStickyNotes() {
+    var saved = localStorage.getItem('md_notes');
+    if (saved) {
+        var ta = document.getElementById('sticky-notes-ta');
+        if (ta) {
+            ta.value = saved;
+            updateStickyCharCount();
+        }
+    }
+})();
+
+function toggleStickyNotes() {
+    var widget = document.getElementById('sticky-notes');
+    if (widget) widget.classList.toggle('sticky-notes--collapsed');
+}
+
+function saveStickyNotes() {
+    var ta = document.getElementById('sticky-notes-ta');
+    if (ta) localStorage.setItem('md_notes', ta.value);
+}
+
+function updateStickyCharCount() {
+    var ta = document.getElementById('sticky-notes-ta');
+    var counter = document.getElementById('sticky-notes-charcount');
+    if (ta && counter) counter.textContent = ta.value.length + ' chars';
+}
+
+/* ── Print / Export ── */
+function printDashboard() {
+    // Expand all detail panels
+    document.querySelectorAll('.company-details').forEach(function(p) {
+        p.classList.add('open');
+    });
+    // Switch all company KPI tabs to Revenue (no hardcoded slugs)
+    document.querySelectorAll('.kpi-tabs-container').forEach(function(container) {
+        var id = container.id.replace('kpi-tabs-', '');
+        switchKpiTab(id, 'revenue');
+    });
+    window.print();
+}
+
+window.onafterprint = function() {
+    document.querySelectorAll('.company-details').forEach(function(p) {
+        p.classList.remove('open');
+    });
+};
