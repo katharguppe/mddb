@@ -436,6 +436,43 @@ p {
     background: rgba(232, 168, 56, 0.12);
 }
 
+/* Severity tinting for aging bucket pills (active state only) */
+.aging-pill[data-bucket="14d"].active {
+    border-color: #f59e0b;
+    background: rgba(245, 158, 11, 0.12);
+}
+.aging-pill[data-bucket="14d"].active .aging-pill-label,
+.aging-pill[data-bucket="14d"].active .aging-pill-count {
+    color: #f59e0b;
+}
+
+.aging-pill[data-bucket="21d"].active {
+    border-color: #f97316;
+    background: rgba(249, 115, 22, 0.12);
+}
+.aging-pill[data-bucket="21d"].active .aging-pill-label,
+.aging-pill[data-bucket="21d"].active .aging-pill-count {
+    color: #f97316;
+}
+
+.aging-pill[data-bucket="90d"].active {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.12);
+}
+.aging-pill[data-bucket="90d"].active .aging-pill-label,
+.aging-pill[data-bucket="90d"].active .aging-pill-count {
+    color: #ef4444;
+}
+
+.aging-pill[data-bucket="npa"].active {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.18);
+}
+.aging-pill[data-bucket="npa"].active .aging-pill-label,
+.aging-pill[data-bucket="npa"].active .aging-pill-count {
+    color: #ef4444;
+}
+
 .aging-pill--empty,
 .aging-pill:disabled {
     opacity: 0.35;
