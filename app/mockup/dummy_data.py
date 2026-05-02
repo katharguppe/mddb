@@ -963,3 +963,73 @@ KPI_AGING = {
         },
     },
 }
+
+# Weekly Pulse: committed (Mon) vs actual (Fri) revenue for the current review week.
+# actual_pct = round(actual / committed * 100). Status colors via pct_class macro.
+WEEKLY_PULSE = {
+    "week_label":      "Week of 21 Apr – 25 Apr 2026",
+    "committed_label": "Last committed: Mon 21 Apr",
+    "rows": [
+        {
+            "id":         "transactions",
+            "name":       "Fidelitus Transactions",
+            "committed":  "Rs.9 Cr",
+            "actual":     "Rs.9.8 Cr",
+            "delta":      "+0.8 Cr",
+            "delta_sign": "pos",
+            "actual_pct": 109,
+        },
+        {
+            "id":         "projects",
+            "name":       "Fidelitus Projects",
+            "committed":  "Rs.4 Cr",
+            "actual":     "Rs.1.8 Cr",
+            "delta":      "−2.2 Cr",
+            "delta_sign": "neg",
+            "actual_pct": 45,
+        },
+        {
+            "id":         "fms",
+            "name":       "Fidelitus FMS",
+            "committed":  "Rs.2.5 Cr",
+            "actual":     "Rs.2.1 Cr",
+            "delta":      "−0.4 Cr",
+            "delta_sign": "neg",
+            "actual_pct": 84,
+        },
+        {
+            "id":         "hrlabs",
+            "name":       "Fidelitus HR Labs",
+            "committed":  "Rs.1.5 Cr",
+            "actual":     "Rs.0.3 Cr",
+            "delta":      "−1.2 Cr",
+            "delta_sign": "neg",
+            "actual_pct": 20,
+        },
+        {
+            "id":         "technology",
+            "name":       "Fidelitus Technology",
+            "committed":  "Rs.1.2 Cr",
+            "actual":     "Rs.0.5 Cr",
+            "delta":      "−0.7 Cr",
+            "delta_sign": "neg",
+            "actual_pct": 42,
+        },
+        {
+            "id":         "gcc",
+            "name":       "Fidelitus GCC Nexus",
+            "committed":  "Rs.0.5 Cr",
+            "actual":     "Rs.0.05 Cr",
+            "delta":      "−0.45 Cr",
+            "delta_sign": "neg",
+            "actual_pct": 10,
+        },
+    ],
+    "total": {
+        "committed":  "Rs.18.7 Cr",
+        "actual":     "Rs.14.55 Cr",
+        "delta":      "−4.15 Cr",
+        "delta_sign": "neg",
+        "actual_pct": 78,
+    },
+}

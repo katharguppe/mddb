@@ -89,3 +89,17 @@ function resetAgingPills(companyId) {
         table.classList.remove('open');
     });
 }
+
+/* ── Time-period filter ── */
+function setTimePeriod(period) {
+    // Update active pill
+    document.querySelectorAll('.tf-pill').forEach(function(pill) {
+        pill.classList.toggle('active', pill.textContent.trim() === period);
+    });
+
+    // Show Weekly Pulse only on WTD
+    var pulse = document.getElementById('weekly-pulse-section');
+    if (pulse) {
+        pulse.classList.toggle('hidden', period !== 'WTD');
+    }
+}
