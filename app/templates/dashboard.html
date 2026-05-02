@@ -20,7 +20,15 @@
         <p class="dashboard-eyebrow">Fidelitus Corp . MD Dashboard</p>
         <h1 class="dashboard-title">Consolidated View</h1>
     </div>
-    <span class="phase-badge">Phase 0 Mockup</span>
+    <div class="header-right">
+        <span class="phase-badge">Phase 0 Mockup</span>
+        <div class="time-filter" id="time-filter">
+            <button class="tf-pill active" onclick="setTimePeriod('WTD')">WTD</button>
+            <button class="tf-pill"        onclick="setTimePeriod('MTD')">MTD</button>
+            <button class="tf-pill"        onclick="setTimePeriod('QTD')">QTD</button>
+            <button class="tf-pill"        onclick="setTimePeriod('YTD')">YTD</button>
+        </div>
+    </div>
 </header>
 
 <main class="dashboard-main">
@@ -58,6 +66,63 @@
         <div class="company-details corporate-aging-panel" id="details-corporate">
             {{ aging_panel("corporate", aging["corporate"]) }}
         </div>
+    </section>
+
+    {# ── Section W: Weekly Pulse ── #}
+    <section class="section weekly-pulse-section" id="weekly-pulse-section">
+        <div class="section-label">
+            Weekly Pulse
+            <span class="pulse-week-meta">
+                {{ weekly_pulse.week_label }} &nbsp;·&nbsp; {{ weekly_pulse.committed_label }}
+            </span>
+        </div>
+
+        <table class="pulse-table">
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Committed (Mon)</th>
+                    <th>Actual (Fri)</th>
+                    <th>Delta</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in weekly_pulse.rows %}
+                <tr class="pulse-row pulse-row--clickable"
+                    onclick="toggleDetails('{{ row.id }}')">
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.committed }}</td>
+                    <td>{{ row.actual }}</td>
+                    <td class="pulse-delta pulse-delta--{{ row.delta_sign }}">
+                        {% if row.delta_sign == 'pos' %}▲{% else %}▼{% endif %}
+                        {{ row.delta }}
+                    </td>
+                    <td>
+                        <span class="pct-badge {{ pct_class(row.actual_pct) }}">
+                            {{ row.actual_pct }}%
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="pulse-total-row">
+                    <td>CORPORATE TOTAL</td>
+                    <td>{{ weekly_pulse.total.committed }}</td>
+                    <td>{{ weekly_pulse.total.actual }}</td>
+                    <td class="pulse-delta pulse-delta--{{ weekly_pulse.total.delta_sign }}">
+                        {% if weekly_pulse.total.delta_sign == 'pos' %}▲{% else %}▼{% endif %}
+                        {{ weekly_pulse.total.delta }}
+                    </td>
+                    <td>
+                        <span class="pct-badge {{ pct_class(weekly_pulse.total.actual_pct) }}">
+                            {{ weekly_pulse.total.actual_pct }}%
+                        </span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
     </section>
 
     {# ── Section B: Company Cards ── #}
